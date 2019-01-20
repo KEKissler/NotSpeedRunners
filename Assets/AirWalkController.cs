@@ -2,34 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundMovementController : MonoBehaviour {
-    public float targetWalkSpeed, walkAccel, walkDecel, frictionDecel;
+public class AirWalkController : MonoBehaviour {
+    public float accel, decel, maxAirSpeed, frictionDecel;
 
     private Rigidbody rb;
     private JumpController jc;
+    private PlayerController pc;
 
-	void Start () {
+	void Start ()
+    {
         rb = GetComponent<Rigidbody>();
         jc = GetComponent<JumpController>();
-	}
-	
+        pc = GetComponent<PlayerController>();
+    }
+
 	// Update is called once per frame
 	void Update () {
-        //Ground movement only applied when grounded and not currently swinging
-        if (!jc.isGrounded)
+        if (pc.isGrappling || jc.isGrounded)
             return;
-        
         //friction calcs
         float speedReductionThisFrame = Time.deltaTime * frictionDecel;
         if (Mathf.Abs(rb.velocity.x) > speedReductionThisFrame)
         {
-            rb.velocity += new Vector3(-1 * Mathf.Sign(rb.velocity.x) * speedReductionThisFrame, 0, 0);
+            rb.velocity += -speedReductionThisFrame * rb.velocity.normalized;
         }
         else
         {
             rb.velocity = new Vector3(0, rb.velocity.y, 0);
         }
-
         //movement calcs
         float oldSpeed = rb.velocity.x;//grounded can only occur against flat surfaces below player, speed should only be in x dir
         float input = Input.GetAxisRaw("Horizontal");
@@ -40,18 +40,18 @@ public class GroundMovementController : MonoBehaviour {
             if ((Mathf.Sign(oldSpeed) == Mathf.Sign(input)) || Mathf.Approximately(oldSpeed, 0))
             {
                 //if applying max accel would not put speed above target limit
-                if (Mathf.Abs(oldSpeed + (input * walkAccel * Time.deltaTime)) < targetWalkSpeed)
+                if (Mathf.Abs(oldSpeed + (input * accel * Time.deltaTime)) < maxAirSpeed)
                 {
-                    rb.velocity = new Vector3(oldSpeed + (input * walkAccel * Time.deltaTime), rb.velocity.y, 0);
+                    rb.velocity = new Vector3(oldSpeed + (input * accel * Time.deltaTime), rb.velocity.y, 0);
                 }
                 //would go beyond limit
                 else
                 {
                     //so set velocity to either the targetWalkSpeed or leave it untouched if player was already traveling faster
-                    if (Mathf.Abs(rb.velocity.x) < targetWalkSpeed)
+                    if (Mathf.Abs(rb.velocity.x) < maxAirSpeed)
                     {
-                        Debug.Log("Set to target walk speed!");
-                        rb.velocity = new Vector3(Mathf.Sign(oldSpeed) * targetWalkSpeed, rb.velocity.y, 0);
+                        Debug.Log("Set to target air speed!");
+                        rb.velocity = new Vector3(Mathf.Sign(oldSpeed) * maxAirSpeed, rb.velocity.y, 0);
                     }
                 }
             }
@@ -59,8 +59,9 @@ public class GroundMovementController : MonoBehaviour {
             else
             {
                 //no check needed, losing speed and minimum is zero.
-                rb.velocity = new Vector3(oldSpeed + (input * walkDecel * Time.deltaTime), rb.velocity.y, 0);
+                rb.velocity = new Vector3(oldSpeed + (input * decel * Time.deltaTime), rb.velocity.y, 0);
             }
-        }        
-	}
+        }
+    }
+
 }

@@ -842,6 +842,7 @@ GameObject:
   - component: {fileID: 1916432690}
   - component: {fileID: 1916432691}
   - component: {fileID: 1916432692}
+  - component: {fileID: 1916432693}
   m_Layer: 13
   m_Name: Player
   m_TagString: Untagged
@@ -942,14 +943,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08c0f1ccf76a8f41afe048a94b7d7f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxWalkSpeed: 0
-  walkSpeed: 0
-  maxAirSpeed: 0
-  airSpeed: 0
-  WalkFriction: 0
-  AirFriction: 0
-  leftKey: 97
-  rightKey: 100
+  leftKey: 113
+  rightKey: 101
   isGrappling: 0
   grapplePoint: {x: 0, y: 0, z: 0}
   ProjectilePrefab: {fileID: 1473349282892554, guid: d6eefc7b9d7524f49be8763f4c36bc11,
@@ -970,6 +965,7 @@ MonoBehaviour:
   maximumGrappleSpeed: 30
   maxPositiveGrappleAccel: 14
   maxNegativeGrappleAccel: 5
+  grappleFriction: 2
   grappleSpeedMultiplier: 1
   frameWindowSize: 0.01
   specialDropFrames: 5
@@ -1198,7 +1194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47ce3f252d9691f469d9edcc1e3c179e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSpeed: 15.5
+  minSpeed: 30
 --- !u!114 &1916432692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1214,6 +1210,21 @@ MonoBehaviour:
   walkAccel: 20
   walkDecel: 20
   frictionDecel: 10
+--- !u!114 &1916432693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1916432680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59403980ec832b5498e4be2e6be516f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  accel: 15
+  decel: 20
+  maxAirSpeed: 20
+  frictionDecel: 2
 --- !u!1 &1924982242
 GameObject:
   m_ObjectHideFlags: 0

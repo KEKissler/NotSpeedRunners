@@ -7,6 +7,7 @@ public class GrappleMovementController : MonoBehaviour {
     public float maxPositiveGrappleAccel, maxNegativeGrappleAccel;//maxGrAccel needs to be like, 30% more than what you expect
     //because im not executing this speed checking thing in the physics update, errors in measuring acceleration
     //positive is checked when gaining speed, negative is checked when losing speed
+    public float grappleFriction;//a rarely used number, if you somehow are too fast while grappling, this acceleration is to slow you
     public float grappleSpeedMultiplier;
     public float frameWindowSize;//this value is how frequently to poll, in seconds, for different angle offsets for the release timer
     public int specialDropFrames;//total number of frames where special behavior occurs on grapple release
@@ -32,10 +33,24 @@ public class GrappleMovementController : MonoBehaviour {
         if (!pc.isGrappling)
             return;
         float oldSpeed = rb.velocity.magnitude;
-        float magnitude = Mathf.Clamp(rb.velocity.magnitude, minimumGrappleSpeed, maximumGrappleSpeed);
+        float magnitude = oldSpeed;
+        bool wasNotClamped = true;
+        //modified clamp, if its too low it is set to be the min in range, if it is too high its slowed down but not forced to be max
+        if(rb.velocity.magnitude < minimumGrappleSpeed)
+        {
+            wasNotClamped = false;
+            magnitude = minimumGrappleSpeed;
+        }
+        else if (rb.velocity.magnitude > maximumGrappleSpeed)
+        {
+            wasNotClamped = false;
+            magnitude -= Time.deltaTime * grappleFriction;
+        }
+        
+       // magnitude = Mathf.Clamp(rb.velocity.magnitude, minimumGrappleSpeed, maximumGrappleSpeed);
         //Debug.Log("acceleration = " + (magnitude - speedLastUpdate) / Time.deltaTime);
 
-        bool wasNotClamped = Mathf.Approximately(oldSpeed, magnitude);
+        //bool wasNotClamped = Mathf.Approximately(oldSpeed, magnitude);
         
         //only do this if not clamped, since clamping is an instant change that is seen as near infinite acceleration :/
         //if speedchange since last frame is too great, reduce the change to the maximum allowed acceleration
@@ -63,6 +78,7 @@ public class GrappleMovementController : MonoBehaviour {
                 }
             }
         }
+        //now that magnitude is all sorted out, apply it in the swingin direction
         rb.velocity = grappleToVelocityDirection * ((pc.grapplePoint - transform.position).normalized * magnitude);
         timeSinceGrappleLatch += Time.deltaTime;
         speedLastUpdate = magnitude;
@@ -82,6 +98,7 @@ public class GrappleMovementController : MonoBehaviour {
         //only do special things if the frame this was called is in the specialDropFrame range
         if(frame <= specialDropFrames)
         {
+            Debug.Log("drop grapple");
             //redirect velocity down, down amount scaled to how close to frame 0 the release was
             rb.velocity = rb.velocity.magnitude * Vector3.Lerp(Vector3.down, rb.velocity.normalized, (1.0f * frame) / specialDropFrames);
         }

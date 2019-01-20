@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    public float maxWalkSpeed, walkSpeed, maxAirSpeed, airSpeed, WalkFriction, AirFriction;
     public KeyCode leftKey, rightKey;
     [HideInInspector]
     public bool isGrappling = false;
@@ -81,13 +80,16 @@ public class PlayerController : MonoBehaviour {
         gmc.OnGrappleLatch();
     }
 
+    //disconnects the grapple and, if the grapple had latched, calculates drop grapple
     public void releaseGrapple()
     {
         currentGrappleDir = KeyCode.None;
         grappleHookProjectile.GetComponent<GrappleProjectileController>().Reset();
         lr.enabled = false;
-        isGrappling = false;
-        gmc.OnGrappleRelease();
+        if (isGrappling) {
+            isGrappling = false;
+            gmc.OnGrappleRelease();
+        }
     }
 
     private void fireGrapple(bool grappleLeft)

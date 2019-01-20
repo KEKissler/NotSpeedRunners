@@ -10,11 +10,16 @@ public class RespawnPointController : MonoBehaviour {
 
     private GameObject player;
     private Rigidbody rb;
+    private PlayerController pc;
+    private JumpController jc;
+
 	// Use this for initialization
 	void Start () {
         CurrentRespawnPoint = transform.position;
         player = GameObject.Find("Player");
         rb = player.GetComponent<Rigidbody>();
+        pc = player.GetComponent<PlayerController>();
+        jc = player.GetComponent<JumpController>();
 	}
 	
 	// Update is called once per frame
@@ -31,5 +36,8 @@ public class RespawnPointController : MonoBehaviour {
         player.transform.position = CurrentRespawnPoint;
         //and speed
         rb.velocity = new Vector3();
+        //and disconnect grapples
+        pc.releaseGrapple();
+        jc.hasDoubleJump = true;
         }
 }
