@@ -65,6 +65,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d6fcdc40a5bc4b46b79ce343f55a995, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  particleEmitterPrefab: {fileID: 1887410559341596, guid: f6c1c95c4b2886447a1ef2e717f7fca4,
+    type: 2}
+  particleTTL: 4.8
+  particleForceMult: 1
 --- !u!212 &212230540436561646
 SpriteRenderer:
   m_ObjectHideFlags: 1
