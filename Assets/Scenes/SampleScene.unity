@@ -808,6 +808,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 54295868553822082, guid: 93b47f5a078946e4fb1e11dbf57567c9,
+        type: 2}
+      propertyPath: m_Constraints
+      value: 56
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93b47f5a078946e4fb1e11dbf57567c9, type: 2}
   m_IsPrefabAsset: 0
@@ -1528,7 +1533,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0:00.00
+  m_Text: 0:00
 --- !u!222 &1462373424
 CanvasRenderer:
   m_ObjectHideFlags: 0

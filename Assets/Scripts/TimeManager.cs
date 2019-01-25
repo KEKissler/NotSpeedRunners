@@ -51,6 +51,7 @@ public class TimeManager : MonoBehaviour {
     public void resetCurrentTime()
     {
         currentTime = 0;
+        current.text = TimeToString(currentTime);
         finished = false;
     }
 
