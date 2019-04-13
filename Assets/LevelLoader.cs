@@ -35,9 +35,6 @@ public class LevelLoader : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
                 TargetController.RemainingTargets = 0;
-                RespawnPointController test = GameObject.Find("RespawnPoint").GetComponent<RespawnPointController>();
-                test.teleportPlayerToLastRespawnPoint();
-                Debug.Log("1");
                 SceneManager.LoadScene(i, LoadSceneMode.Single);
                 break;
             }

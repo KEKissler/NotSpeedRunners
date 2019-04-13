@@ -9,7 +9,6 @@ public class RespawnPointController : MonoBehaviour {
     [HideInInspector]
     public Vector3 CurrentRespawnPoint;
 
-    private Vector3 cachedGrav;
     private bool pausedGameAtSpawn = true;
     private GameObject player, targets;
     private Rigidbody rb;
@@ -29,8 +28,7 @@ public class RespawnPointController : MonoBehaviour {
         rpc = targets.GetComponent<RespawnPointController>();
         tm = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         tm.enabled = false;
-        cachedGrav = Physics.gravity;
-        Physics.gravity = new Vector3();
+        rb.useGravity = false;
     }
 	
 	// Update is called once per frame
@@ -41,7 +39,7 @@ public class RespawnPointController : MonoBehaviour {
         }
         else if (pausedGameAtSpawn && (Input.anyKeyDown || Input.GetAxisRaw("Horizontal") != 0))
         {
-            Physics.gravity = cachedGrav;
+            rb.useGravity = true;
             pausedGameAtSpawn = false;
             tm.enabled = true;
         }
@@ -71,7 +69,7 @@ public class RespawnPointController : MonoBehaviour {
         //start timer out as stopped
         tm.enabled = false;
         pausedGameAtSpawn = true;
-        Physics.gravity = new Vector3();
+        rb.useGravity = false;
         //reset rotation and angular velo
         rb.angularVelocity = new Vector3();
         player.transform.rotation = Quaternion.identity;
