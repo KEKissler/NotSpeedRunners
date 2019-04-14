@@ -666,7 +666,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 18
+  orthographic size: 12
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -710,6 +710,7 @@ MonoBehaviour:
   baseLerpAmount: 0
   lerpAmpBySpeed: 0
   velocityPredictAmount: 0.8
+  freezeYPos: 1
 --- !u!1001 &538805421
 Prefab:
   m_ObjectHideFlags: 0
@@ -1547,6 +1548,48 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4904262196920016, guid: d025321902ada3545881a054c373683d,
     type: 2}
   m_PrefabInternal: {fileID: 1245828378}
+--- !u!1001 &1551215028
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4797174853865768, guid: 06b0a8de4708b1444af49e750ec20544, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4797174853865768, guid: 06b0a8de4708b1444af49e750ec20544, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4797174853865768, guid: 06b0a8de4708b1444af49e750ec20544, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4797174853865768, guid: 06b0a8de4708b1444af49e750ec20544, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4797174853865768, guid: 06b0a8de4708b1444af49e750ec20544, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4797174853865768, guid: 06b0a8de4708b1444af49e750ec20544, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4797174853865768, guid: 06b0a8de4708b1444af49e750ec20544, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4797174853865768, guid: 06b0a8de4708b1444af49e750ec20544, type: 2}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 06b0a8de4708b1444af49e750ec20544, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1001 &1578443104
 Prefab:
   m_ObjectHideFlags: 0
