@@ -317,9 +317,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3462aa83bd34bf48882d8a635404696, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  secondsToPredict: 0.5
+  secondsToPredict: 0.7
   lazerRadius: 2
-  firingFrequencyInSeconds: 3
+  firingFrequencyInSeconds: 1
+  targeting: {fileID: 21300000, guid: 7c34d7c010ae10147bf5e8528433eb3c, type: 3}
+  explosion: {fileID: 21300000, guid: 1fc0412709c984a43bf9bfcbce5e70ef, type: 3}
 --- !u!212 &151934368
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -355,7 +357,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 311641f671b77b441af0ee598cad8c8d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7c34d7c010ae10147bf5e8528433eb3c, type: 3}
   m_Color: {r: 1, g: 0.46264225, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1045,6 +1047,7 @@ MonoBehaviour:
   baseLerpAmount: 0
   lerpAmpBySpeed: 0
   velocityPredictAmount: 0.8
+  freezeXPos: 0
   freezeYPos: 0
 --- !u!1001 &538805421
 Prefab:

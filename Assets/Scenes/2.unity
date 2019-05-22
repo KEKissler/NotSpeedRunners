@@ -955,6 +955,8 @@ MonoBehaviour:
   baseLerpAmount: 0
   lerpAmpBySpeed: 0
   velocityPredictAmount: 0.8
+  freezeXPos: 0
+  freezeYPos: 0
 --- !u!1001 &538805421
 Prefab:
   m_ObjectHideFlags: 0

@@ -35,15 +35,19 @@ public class BasicCameraController : MonoBehaviour {
     public float baseLerpAmount;
     public float lerpAmpBySpeed;
     public float velocityPredictAmount;
+    public bool freezeXPos;
     public bool freezeYPos;
 
 
+
+    private float fixedXPos;
     private float fixedZPos;
     private float fixedYPos;
     private GrappleMovementController gmc;
     private Rigidbody rb;
 	// Use this for initialization
 	void Start () {
+        fixedXPos = transform.position.x;
         fixedZPos = transform.position.z;
         fixedYPos = transform.position.y;
         rb = player.GetComponent<Rigidbody>();
@@ -54,11 +58,16 @@ public class BasicCameraController : MonoBehaviour {
         float lerpAmount = baseLerpAmount + lerpAmpBySpeed * Vector2.Distance((Vector2)(rb.position), (Vector2)(transform.position));
         Vector3 desiredNextCamPos =
             Vector3.LerpUnclamped(
-                new Vector3(rb.position.x, freezeYPos ? fixedYPos : rb.position.y, fixedZPos),
-                new Vector3(rb.position[0] + rb.velocity[0] * velocityPredictAmount,
+                new Vector3(freezeXPos ? fixedXPos : rb.position.x, freezeYPos ? fixedYPos : rb.position.y, fixedZPos),
+
+                new Vector3(freezeXPos ? fixedXPos :
+                            rb.position[0] + rb.velocity[0] * velocityPredictAmount,
+
                             freezeYPos ? fixedYPos :
                             rb.position[1] + rb.velocity[1] * velocityPredictAmount,
+
                             fixedZPos),
+
                 lerpAmount * Time.deltaTime);
 
         transform.position = Vector3.LerpUnclamped(transform.position, desiredNextCamPos, 0.1f);

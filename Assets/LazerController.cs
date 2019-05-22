@@ -14,6 +14,8 @@ public class LazerController : MonoBehaviour {
     public float lazerRadius;
     public float firingFrequencyInSeconds;
 
+    public Sprite targeting, explosion;
+
 	// Use this for initialization
 	void Start () {
         sr = GetComponent<SpriteRenderer>();
@@ -38,15 +40,18 @@ public class LazerController : MonoBehaviour {
             //predict location and set lazer to fire there
             Vector3 predictedLocation = player.transform.position + secondsToPredict * rb.velocity;
             //teleport the sprite there as a warning to player
+            sr.sprite = targeting;
             sr.enabled = true;
             transform.position = predictedLocation;
             yield return new WaitForSeconds(secondsToPredict);
+            sr.sprite = explosion;
             //check if player is too close to lazer, if they are respawn them
             if (Vector2.Distance(transform.position, player.transform.position) < lazerRadius)
             {
                 //player was hit by lazer, respawn them
                 rpc.teleportPlayerToLastRespawnPoint();
             }
+            yield return new WaitForEndOfFrame();
             //disable the lazer's renderer again
             sr.enabled = false;
             //wait fixed amount of time until next firing, maintaining a fire rate specified above, unless its less than 0 seconds

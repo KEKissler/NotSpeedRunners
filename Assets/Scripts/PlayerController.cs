@@ -20,9 +20,14 @@ public class PlayerController : MonoBehaviour {
     private KeyCode currentGrappleDir;
 
     // Use this for initialization
-    void Start()
+
+    void Awake()
     {
         grappleHookProjectile = Instantiate(ProjectilePrefab);
+    }
+
+    void Start()
+    {
         gmc = GetComponent<GrappleMovementController>();
         lr = GetComponent<LineRenderer>();
         lr.enabled = false;
