@@ -19,6 +19,7 @@ public class GrappleMovementController : MonoBehaviour {
     public enum Direction {x_left, x_right, y_left, y_right, z_left, z_right}
     private float timeSinceGrappleLatch = 0.0f;
     private float speedLastUpdate = 0f;
+    private float distanceToGrapplePoint = 0f;
     
 	// Use this for initialization
 	void Start () {
@@ -80,12 +81,19 @@ public class GrappleMovementController : MonoBehaviour {
         }
         //now that magnitude is all sorted out, apply it in the swingin direction
         rb.velocity = grappleToVelocityDirection * ((pc.grapplePoint - transform.position).normalized * magnitude);
+        //enforce maximum distance for grapple line by moving player back to max
+        Vector2 grapplePointToPlayer = transform.position - pc.grapplePoint;
+        //if (grapplePointToPlayer.magnitude > distanceToGrapplePoint)
+        //{
+         //   transform.position = pc.grapplePoint + ((Vector3)grapplePointToPlayer.normalized * distanceToGrapplePoint);
+        //}
         timeSinceGrappleLatch += Time.deltaTime;
         speedLastUpdate = magnitude;
 	}
 
     public void OnGrappleLatch()
     {
+        //distanceToGrapplePoint = Vector2.Distance(transform.position, pc.grapplePoint);
         rb.velocity *= grappleSpeedMultiplier;
         timeSinceGrappleLatch = 0.0f;
         speedLastUpdate = rb.velocity.magnitude;

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class LevelLoader : MonoBehaviour {
 
     public static LevelLoader instance;
+    private RespawnPointController rpc;//a copy of the active rpc in the active scene
 
 	void Awake () {
         //Check if instance already exists
@@ -26,6 +27,7 @@ public class LevelLoader : MonoBehaviour {
 
     void Start()
     {
+        rpc = GameObject.Find("RespawnPoint").GetComponent<RespawnPointController>();
     }
 
     // Update is called once per frame
@@ -34,8 +36,14 @@ public class LevelLoader : MonoBehaviour {
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
+                if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(i))
+                {
+                    rpc.teleportPlayerToLastRespawnPoint();
+                    break;
+                }
                 TargetController.RemainingTargets = 0;
                 SceneManager.LoadScene(i, LoadSceneMode.Single);
+                rpc = GameObject.Find("RespawnPoint").GetComponent<RespawnPointController>();
                 break;
             }
         }

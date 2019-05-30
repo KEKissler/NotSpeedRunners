@@ -37,8 +37,12 @@ public class RespawnPointController : MonoBehaviour {
         {
             teleportPlayerToLastRespawnPoint();
         }
-        else if (pausedGameAtSpawn && (Input.anyKeyDown || Input.GetAxisRaw("Horizontal") != 0))
+        else if (pausedGameAtSpawn && (
+            Input.GetKeyDown(KeyCode.Q)
+            || Input.GetKeyDown(KeyCode.E) 
+            || Input.GetKeyDown(KeyCode.Space)|| Input.GetAxisRaw("Horizontal") != 0))
         {
+            Debug.Log(Input.GetKey(KeyCode.Alpha2   ));
             rb.useGravity = true;
             pausedGameAtSpawn = false;
             tm.enabled = true;
