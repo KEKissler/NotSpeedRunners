@@ -21,10 +21,9 @@ public class RebindControlsOverlay : MonoBehaviour {
     private KeyCode[] kCodes = new KeyCode[5];
     private bool inputAllControls = false;
 
-    public void Awake()
+    public void Setup()
     {
         Debug.Log("awake rebind controls");
-        RestartOverlay();
         save.onClick.AddListener(SaveControls);
         cancel.onClick.AddListener(Cancel);
     }
@@ -37,6 +36,12 @@ public class RebindControlsOverlay : MonoBehaviour {
         gameObject.SetActive(true);
         SetActiveEndButtons(false);
         inputAllControls = false;
+        walkLeftText.text = string.Format("? (currently {0})", InputManager.walkLeft);
+        walkRightText.text = "";
+        grappleLeftText.text = "";
+        grappleRightText.text = "";
+        jumpText.text = "";
+
     }
 
     private void DisableOverlay()
@@ -51,7 +56,8 @@ public class RebindControlsOverlay : MonoBehaviour {
         if (inputAllControls)
         {
             return;
-        } 
+        }
+        CheckForEscape();
         var kCode = GetKeyCodePressedThisFrame();
         if (kCode != null)
         {
@@ -95,7 +101,7 @@ public class RebindControlsOverlay : MonoBehaviour {
     {
         foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
         {
-            if (Input.GetKeyDown(kcode))
+            if (Input.GetKeyDown(kcode) && kcode != KeyCode.Escape)
                 return kcode;
         }
         return null;
@@ -120,5 +126,13 @@ public class RebindControlsOverlay : MonoBehaviour {
     private void Cancel()
     {
         DisableOverlay();
+    }
+
+    private void CheckForEscape()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cancel();
+        }
     }
 }
