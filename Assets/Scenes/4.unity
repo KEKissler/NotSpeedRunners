@@ -2749,45 +2749,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 54295868553822082, guid: 93b47f5a078946e4fb1e11dbf57567c9,
-        type: 2}
-      propertyPath: m_Constraints
-      value: 56
-      objectReference: {fileID: 0}
-    - target: {fileID: 114799356403626340, guid: 93b47f5a078946e4fb1e11dbf57567c9,
-        type: 2}
-      propertyPath: leftKey
-      value: 105
-      objectReference: {fileID: 0}
-    - target: {fileID: 114799356403626340, guid: 93b47f5a078946e4fb1e11dbf57567c9,
-        type: 2}
-      propertyPath: rightKey
-      value: 111
-      objectReference: {fileID: 0}
-    - target: {fileID: 114917935027352748, guid: 93b47f5a078946e4fb1e11dbf57567c9,
-        type: 2}
-      propertyPath: InputManager
-      value: 
-      objectReference: {fileID: 11400000, guid: f1e00075f2a8cea4da899d00ebdffd0d,
-        type: 2}
-    - target: {fileID: 114799356403626340, guid: 93b47f5a078946e4fb1e11dbf57567c9,
-        type: 2}
-      propertyPath: InputManager
-      value: 
-      objectReference: {fileID: 11400000, guid: f1e00075f2a8cea4da899d00ebdffd0d,
-        type: 2}
-    - target: {fileID: 114583931019256014, guid: 93b47f5a078946e4fb1e11dbf57567c9,
-        type: 2}
-      propertyPath: InputManager
-      value: 
-      objectReference: {fileID: 11400000, guid: f1e00075f2a8cea4da899d00ebdffd0d,
-        type: 2}
-    - target: {fileID: 114327806152738508, guid: 93b47f5a078946e4fb1e11dbf57567c9,
-        type: 2}
-      propertyPath: InputManager
-      value: 
-      objectReference: {fileID: 11400000, guid: f1e00075f2a8cea4da899d00ebdffd0d,
-        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93b47f5a078946e4fb1e11dbf57567c9, type: 2}
   m_IsPrefabAsset: 0
