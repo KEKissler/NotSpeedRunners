@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    public InputSettings InputSettings;
     [HideInInspector]
     public bool isGrappling = false;
     [HideInInspector]
@@ -19,7 +18,6 @@ public class PlayerController : MonoBehaviour {
     private JumpController jc;
     private GrappleProjectileController gpc;
     private Rigidbody rb;
-    private KeyCode currentGrappleDir;
 
     // Use this for initialization
 
@@ -36,31 +34,15 @@ public class PlayerController : MonoBehaviour {
         jc = GetComponent<JumpController>();
         gpc = grappleHookProjectile.GetComponent<GrappleProjectileController>();
         rb = GetComponent<Rigidbody>();
-        currentGrappleDir = KeyCode.None;
         InputManager.instance.OnMoveLeftDown += () => { forwardIsRight = false; };
         InputManager.instance.OnMoveRightDown += () => { forwardIsRight = true; };
+        InputManager.instance.OnGrappleDown += () => { fireGrapple(!forwardIsRight); };
+        InputManager.instance.OnGrappleUp += () => { releaseGrapple(); };
     }
 	
 
 	// Update is called once per frame
 	void Update () {
-        //check for grapple release
-        if (currentGrappleDir != KeyCode.None)
-        {
-            if (Input.GetKeyUp(InputSettings.grapple))
-            {
-                releaseGrapple();
-            }
-        }
-        //check for input to start firing a grapple out
-        if (currentGrappleDir == KeyCode.None)
-        {
-            if (Input.GetKeyDown(InputSettings.grapple))
-            {
-                currentGrappleDir = InputSettings.grapple;
-                fireGrapple(!forwardIsRight);
-            }
-        }
         //keeping the would be grapple line updated
         lr.SetPositions(new Vector3[] { GetComponent<Rigidbody>().transform.position, grappleHookProjectile.transform.position });
     }
@@ -77,7 +59,6 @@ public class PlayerController : MonoBehaviour {
     //disconnects the grapple and, if the grapple had latched, calculates drop grapple
     public void releaseGrapple()
     {
-        currentGrappleDir = KeyCode.None;
         grappleHookProjectile.GetComponent<GrappleProjectileController>().Reset();
         lr.enabled = false;
         if (isGrappling) {

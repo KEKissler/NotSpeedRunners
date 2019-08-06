@@ -7,6 +7,9 @@ public class InputManager : MonoBehaviour {
     public InputSettings InputSettings;
     public event System.Action OnMoveLeftDown;
     public event System.Action OnMoveRightDown;
+    public event System.Action OnGrappleDown;
+    public event System.Action OnGrappleUp;
+    public event System.Action OnJump;
     public static InputManager instance;
 
     void Awake () {
@@ -31,10 +34,31 @@ public class InputManager : MonoBehaviour {
         }
         if (Input.GetKeyDown(InputSettings.walkRight))
         {
-            if(OnMoveRightDown != null)
+            if (OnMoveRightDown != null)
             {
                 OnMoveRightDown.Invoke();
             }
         }
-	}
+        if (Input.GetKeyDown(InputSettings.grapple))
+        {
+            if (OnGrappleDown != null)
+            {
+                OnGrappleDown.Invoke();
+            }
+        }
+        if (Input.GetKeyUp(InputSettings.grapple))
+        {
+            if (OnGrappleUp != null)
+            {
+                OnGrappleUp.Invoke();
+            }
+        }
+        if (Input.GetKeyDown(InputSettings.jump))
+        {
+            if (OnJump != null)
+            {
+                OnJump.Invoke();
+            }
+        }
+    }
 }
