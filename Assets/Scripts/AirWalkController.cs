@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AirWalkController : MonoBehaviour {
     public float accel, decel, maxAirSpeed, frictionDecel;
+    public InputManager InputManager;
 
     private Rigidbody rb;
     private JumpController jc;
@@ -32,7 +33,8 @@ public class AirWalkController : MonoBehaviour {
         }
         //movement calcs
         float oldSpeed = rb.velocity.x;//grounded can only occur against flat surfaces below player, speed should only be in x dir
-        float input = Input.GetAxisRaw("Horizontal");
+        float input = (Input.GetKey(InputManager.walkLeft) ? -1 : 0) +
+                (Input.GetKey(InputManager.walkRight) ? 1 : 0);
         //if no input, friction will come for its due and player will slow due to collisions normally
         //but if there is input...
         if (!Mathf.Approximately(input, 0))

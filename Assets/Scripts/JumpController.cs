@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class JumpController : MonoBehaviour {
-    public KeyCode jumpKey;
+    public InputManager InputManager;
     public float jumpForce;
     [HideInInspector]
     public bool isGrounded = false;
@@ -31,8 +31,8 @@ public class JumpController : MonoBehaviour {
         //need to check if grounded and should grant double jump again
         if (isGrounded) 
             hasDoubleJump = true;
-        //might as well check for the jump action in the jump controller script
-        if (Input.GetKeyDown(jumpKey))
+        //finally check for an actual jump
+        if (Input.GetKeyDown(InputManager.jump))
             Jump();
     }
 

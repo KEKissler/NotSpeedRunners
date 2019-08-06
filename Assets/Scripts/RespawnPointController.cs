@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class RespawnPointController : MonoBehaviour {
 
-    public KeyCode respawnButton;
+    public InputManager InputManager;
+    public KeyCode respawnButton;//?
     public float minPosition;
     [HideInInspector]
     public Vector3 CurrentRespawnPoint;
+    [HideInInspector]
+    public int blockers = 0;
 
     private bool pausedGameAtSpawn = true;
     private GameObject player, targets;
@@ -37,12 +40,13 @@ public class RespawnPointController : MonoBehaviour {
         {
             teleportPlayerToLastRespawnPoint();
         }
-        else if (pausedGameAtSpawn && (
-            Input.GetKeyDown(KeyCode.Q)
-            || Input.GetKeyDown(KeyCode.E) 
-            || Input.GetKeyDown(KeyCode.Space)|| Input.GetAxisRaw("Horizontal") != 0))
+        else if (pausedGameAtSpawn && blockers == 0 && (
+            Input.GetKeyDown(InputManager.grappleLeft)
+            || Input.GetKeyDown(InputManager.grappleRight) 
+            || Input.GetKeyDown(InputManager.jump)
+            || Input.GetKeyDown(InputManager.walkLeft)
+            || Input.GetKeyDown(InputManager.walkRight)))
         {
-            Debug.Log(Input.GetKey(KeyCode.Alpha2   ));
             rb.useGravity = true;
             pausedGameAtSpawn = false;
             tm.enabled = true;

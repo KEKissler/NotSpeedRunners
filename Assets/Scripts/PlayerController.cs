@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    public KeyCode leftKey, rightKey;
+    public InputManager InputManager;
     [HideInInspector]
     public bool isGrappling = false;
     [HideInInspector]
@@ -43,16 +43,16 @@ public class PlayerController : MonoBehaviour {
         //check for grapple release
         if (currentGrappleDir != KeyCode.None)
         {
-            if(currentGrappleDir == leftKey)
+            if(currentGrappleDir == InputManager.grappleLeft)
             {
-                if (Input.GetKeyUp(leftKey))
+                if (Input.GetKeyUp(InputManager.grappleLeft))
                 {
                     releaseGrapple();
                 }
             }
             else //currentGrappleDir is rightKey
             {
-                if (Input.GetKeyUp(rightKey))
+                if (Input.GetKeyUp(InputManager.grappleRight))
                 {
                     releaseGrapple();
                 }
@@ -61,15 +61,15 @@ public class PlayerController : MonoBehaviour {
         //check for input to start firing a grapple out
         if (currentGrappleDir == KeyCode.None)
         {
-            if (Input.GetKeyDown(leftKey))
+            if (Input.GetKeyDown(InputManager.grappleLeft))
             {
                 fireGrapple(true);
-                currentGrappleDir = leftKey;
+                currentGrappleDir = InputManager.grappleLeft;
             }
-            else if (Input.GetKeyDown(rightKey))
+            else if (Input.GetKeyDown(InputManager.grappleRight))
             {
                 fireGrapple(false);
-                currentGrappleDir = rightKey;
+                currentGrappleDir = InputManager.grappleRight;
             }
         }
         //keeping the would be grapple line updated
