@@ -11,8 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971f6f6e391ca764a9f4df895cb7ff91, type: 3}
   m_Name: InputSettings
   m_EditorClassIdentifier: 
-  jump: 0
-  walkLeft: 0
-  walkRight: 0
-  grappleLeft: 0
-  grappleRight: 0
+  jump: 32
+  walkLeft: 97
+  walkRight: 100
+  grapple: 101
+  respawn: 112

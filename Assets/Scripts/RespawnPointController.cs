@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class RespawnPointController : MonoBehaviour {
 
-    public InputSettings InputSettings;
-    public KeyCode respawnButton;//?
     public float minPosition;
     [HideInInspector]
     public Vector3 CurrentRespawnPoint;
@@ -20,8 +18,9 @@ public class RespawnPointController : MonoBehaviour {
     private RespawnPointController rpc;
     private TimeManager tm;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         CurrentRespawnPoint = transform.position;
         player = GameObject.Find("Player");
         rb = player.GetComponent<Rigidbody>();
@@ -32,25 +31,30 @@ public class RespawnPointController : MonoBehaviour {
         tm = GameObject.Find("TimeManager").GetComponent<TimeManager>();
         tm.enabled = false;
         rb.useGravity = false;
+        InputManager.instance.OnAnyInputDown += () =>
+        {
+            if (pausedGameAtSpawn && blockers == 0)
+            {
+                UnfreezeGame();
+            }
+        };
+        InputManager.instance.OnRespawn += () => { teleportPlayerToLastRespawnPoint(); };
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKeyDown(respawnButton) || player.transform.position.y < minPosition)
+        if (player.transform.position.y < minPosition)
         {
-            teleportPlayerToLastRespawnPoint();
-        }
-        else if (pausedGameAtSpawn && blockers == 0 && (
-            Input.GetKeyDown(InputSettings.grapple)
-            || Input.GetKeyDown(InputSettings.jump)
-            || Input.GetKeyDown(InputSettings.walkLeft)
-            || Input.GetKeyDown(InputSettings.walkRight)))
-        {
-            rb.useGravity = true;
-            pausedGameAtSpawn = false;
-            tm.enabled = true;
-        }
-	}
+            InputManager.instance.PlayerFellOutOfBounds();
+        }       
+    }
+	
+    private void UnfreezeGame()
+    {
+        rb.useGravity = true;
+        pausedGameAtSpawn = false;
+        tm.enabled = true;
+    }
 
     public void teleportPlayerToLastRespawnPoint()
     {

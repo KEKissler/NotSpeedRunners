@@ -17,7 +17,6 @@ public class PlayerController : MonoBehaviour {
     private GrappleMovementController gmc;
     private JumpController jc;
     private GrappleProjectileController gpc;
-    private Rigidbody rb;
 
     // Use this for initialization
 
@@ -33,7 +32,6 @@ public class PlayerController : MonoBehaviour {
         lr.enabled = false;
         jc = GetComponent<JumpController>();
         gpc = grappleHookProjectile.GetComponent<GrappleProjectileController>();
-        rb = GetComponent<Rigidbody>();
         InputManager.instance.OnMoveLeftDown += () => { forwardIsRight = false; };
         InputManager.instance.OnMoveRightDown += () => { forwardIsRight = true; };
         InputManager.instance.OnGrappleDown += () => { fireGrapple(!forwardIsRight); };
@@ -71,6 +69,7 @@ public class PlayerController : MonoBehaviour {
     {
         grappleHookProjectile.GetComponent<Rigidbody>().velocity = gpc.speed * ((grappleLeft) ? new Vector3(-1, 1, 0) : new Vector3(1, 1, 0));
         grappleHookProjectile.transform.position = transform.position;
+        lr.SetPositions(new Vector3[] { GetComponent<Rigidbody>().transform.position, grappleHookProjectile.transform.position });
         grappleHookProjectile.SetActive(true);
         lr.enabled = true;
         gmc.setGrappleDir((grappleLeft) ? GrappleMovementController.Direction.x_left : GrappleMovementController.Direction.x_right);

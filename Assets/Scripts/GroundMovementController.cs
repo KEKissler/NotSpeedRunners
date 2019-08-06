@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GroundMovementController : MonoBehaviour {
     public float targetWalkSpeed, walkAccel, walkDecel, frictionDecel;
-    public InputSettings InputSettings;
 
     private Rigidbody rb;
     private JumpController jc;
@@ -33,8 +32,7 @@ public class GroundMovementController : MonoBehaviour {
 
         //movement calcs
         float oldSpeed = rb.velocity.x;//grounded can only occur against flat surfaces below player, speed should only be in x dir
-        float input = (Input.GetKey(InputSettings.walkLeft) ? -1 : 0) +
-                (Input.GetKey(InputSettings.walkRight) ? 1 : 0);
+        float input = InputManager.instance.HorizontalAxis;
         //if no input, friction will come for its due and player will slow due to collisions normally
         //but if there is input...
         if (!Mathf.Approximately(input, 0))

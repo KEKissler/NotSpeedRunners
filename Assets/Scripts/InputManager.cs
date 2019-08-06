@@ -10,7 +10,10 @@ public class InputManager : MonoBehaviour {
     public event System.Action OnGrappleDown;
     public event System.Action OnGrappleUp;
     public event System.Action OnJump;
+    public event System.Action OnAnyInputDown;
+    public event System.Action OnRespawn;
     public static InputManager instance;
+    public int HorizontalAxis = 0;
 
     void Awake () {
 		if(instance != null)
@@ -29,21 +32,43 @@ public class InputManager : MonoBehaviour {
         {
             if(OnMoveLeftDown != null)
             {
+                HorizontalAxis -= 1;
                 OnMoveLeftDown.Invoke();
             }
+            if(OnAnyInputDown != null)
+            {
+                OnAnyInputDown.Invoke();
+            }
+        }
+        if (Input.GetKeyUp(InputSettings.walkLeft))
+        {
+            HorizontalAxis += 1;
         }
         if (Input.GetKeyDown(InputSettings.walkRight))
         {
             if (OnMoveRightDown != null)
             {
+                HorizontalAxis += 1;
                 OnMoveRightDown.Invoke();
             }
+            if (OnAnyInputDown != null)
+            {
+                OnAnyInputDown.Invoke();
+            }
+        }
+        if (Input.GetKeyUp(InputSettings.walkRight))
+        {
+            HorizontalAxis -= 1;
         }
         if (Input.GetKeyDown(InputSettings.grapple))
         {
             if (OnGrappleDown != null)
             {
                 OnGrappleDown.Invoke();
+            }
+            if (OnAnyInputDown != null)
+            {
+                OnAnyInputDown.Invoke();
             }
         }
         if (Input.GetKeyUp(InputSettings.grapple))
@@ -59,6 +84,25 @@ public class InputManager : MonoBehaviour {
             {
                 OnJump.Invoke();
             }
+            if (OnAnyInputDown != null)
+            {
+                OnAnyInputDown.Invoke();
+            }
+        }
+        if (Input.GetKeyDown(InputSettings.respawn))
+        {
+            if (OnRespawn != null)
+            {
+                OnRespawn.Invoke();
+            }
+        }
+    }
+
+    public void PlayerFellOutOfBounds()
+    {
+        if (OnRespawn != null)
+        {
+            OnRespawn.Invoke();
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class JumpController : MonoBehaviour {
-    public InputSettings InputSettings;
     public float jumpForce;
     [HideInInspector]
     public bool isGrounded = false;
@@ -20,6 +19,7 @@ public class JumpController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         pc = GetComponent<PlayerController>();
         bc = GetComponent<BoxCollider>();
+        InputManager.instance.OnJump += () => { Jump(); };
 	}
 	
 	// Update is called once per frame
@@ -31,9 +31,6 @@ public class JumpController : MonoBehaviour {
         //need to check if grounded and should grant double jump again
         if (isGrounded) 
             hasDoubleJump = true;
-        //finally check for an actual jump
-        if (Input.GetKeyDown(InputSettings.jump))
-            Jump();
     }
 
     public void Jump()
