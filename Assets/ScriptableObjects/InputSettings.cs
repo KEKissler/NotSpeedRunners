@@ -6,6 +6,5 @@ public class InputSettings : ScriptableObject {
     public KeyCode jump;
     public KeyCode walkLeft;
     public KeyCode walkRight;
-    public KeyCode grappleLeft;
-    public KeyCode grappleRight;
+    public KeyCode grapple;
 }

@@ -10,12 +10,11 @@ public class RebindControlsOverlay : MonoBehaviour {
     public InputSettings InputSettings;
     public TextMeshProUGUI walkLeftText;
     public TextMeshProUGUI walkRightText;
-    public TextMeshProUGUI grappleLeftText;
-    public TextMeshProUGUI grappleRightText;
+    public TextMeshProUGUI grappleText;
     public TextMeshProUGUI jumpText;
     public Button save;
     public Button cancel;
-    public const int NUM_REBINDABLE_CONTROLS = 5;
+    public const int NUM_REBINDABLE_CONTROLS = 4;
 
     private int currentControlEntry = 0;
     private KeyCode[] kCodes = new KeyCode[5];
@@ -38,8 +37,7 @@ public class RebindControlsOverlay : MonoBehaviour {
         inputAllControls = false;
         walkLeftText.text = string.Format("? (currently {0})", InputSettings.walkLeft);
         walkRightText.text = "";
-        grappleLeftText.text = "";
-        grappleRightText.text = "";
+        grappleText.text = "";
         jumpText.text = "";
 
     }
@@ -70,17 +68,13 @@ public class RebindControlsOverlay : MonoBehaviour {
                     break;
                 case 1:
                     walkRightText.text = kCode.ToString();
-                    grappleLeftText.text = string.Format("? (currently {0})", InputSettings.walkRight);
+                    grappleText.text = string.Format("? (currently {0})", InputSettings.walkRight);
                     break;
                 case 2:
-                    grappleLeftText.text = kCode.ToString();
-                    grappleRightText.text = string.Format("? (currently {0})", InputSettings.grappleLeft);
+                    grappleText.text = kCode.ToString();
+                    jumpText.text = string.Format("? (currently {0})", InputSettings.grapple);
                     break;
                 case 3:
-                    grappleRightText.text = kCode.ToString();
-                    jumpText.text = string.Format("? (currently {0})", InputSettings.grappleRight);
-                    break;
-                case 4:
                     jumpText.text = kCode.ToString();
                     SetActiveEndButtons(true);
                     inputAllControls = true;
@@ -117,9 +111,8 @@ public class RebindControlsOverlay : MonoBehaviour {
     {
         InputSettings.walkLeft = kCodes[0];
         InputSettings.walkRight = kCodes[1];
-        InputSettings.grappleLeft = kCodes[2];
-        InputSettings.grappleRight = kCodes[3];
-        InputSettings.jump = kCodes[4];
+        InputSettings.grapple = kCodes[2];
+        InputSettings.jump = kCodes[3];
         DisableOverlay();
     }
 

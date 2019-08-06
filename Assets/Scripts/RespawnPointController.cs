@@ -41,8 +41,7 @@ public class RespawnPointController : MonoBehaviour {
             teleportPlayerToLastRespawnPoint();
         }
         else if (pausedGameAtSpawn && blockers == 0 && (
-            Input.GetKeyDown(InputSettings.grappleLeft)
-            || Input.GetKeyDown(InputSettings.grappleRight) 
+            Input.GetKeyDown(InputSettings.grapple)
             || Input.GetKeyDown(InputSettings.jump)
             || Input.GetKeyDown(InputSettings.walkLeft)
             || Input.GetKeyDown(InputSettings.walkRight)))

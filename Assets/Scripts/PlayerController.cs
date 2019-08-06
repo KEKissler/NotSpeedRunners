@@ -47,7 +47,7 @@ public class PlayerController : MonoBehaviour {
         //check for grapple release
         if (currentGrappleDir != KeyCode.None)
         {
-            if (Input.GetKeyUp(InputSettings.grappleLeft))
+            if (Input.GetKeyUp(InputSettings.grapple))
             {
                 releaseGrapple();
             }
@@ -55,9 +55,9 @@ public class PlayerController : MonoBehaviour {
         //check for input to start firing a grapple out
         if (currentGrappleDir == KeyCode.None)
         {
-            if (Input.GetKeyDown(InputSettings.grappleLeft))
+            if (Input.GetKeyDown(InputSettings.grapple))
             {
-                currentGrappleDir = InputSettings.grappleLeft;
+                currentGrappleDir = InputSettings.grapple;
                 fireGrapple(!forwardIsRight);
             }
         }
