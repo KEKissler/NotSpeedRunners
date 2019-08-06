@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AirWalkController : MonoBehaviour {
     public float accel, decel, maxAirSpeed, frictionDecel;
-    public InputManager InputManager;
+    public InputSettings InputManager;
 
     private Rigidbody rb;
     private JumpController jc;

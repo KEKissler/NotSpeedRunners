@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class JumpController : MonoBehaviour {
-    public InputManager InputManager;
+    public InputSettings InputSettings;
     public float jumpForce;
     [HideInInspector]
     public bool isGrounded = false;
@@ -32,7 +32,7 @@ public class JumpController : MonoBehaviour {
         if (isGrounded) 
             hasDoubleJump = true;
         //finally check for an actual jump
-        if (Input.GetKeyDown(InputManager.jump))
+        if (Input.GetKeyDown(InputSettings.jump))
             Jump();
     }
 

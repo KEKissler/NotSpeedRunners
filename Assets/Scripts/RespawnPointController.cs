@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RespawnPointController : MonoBehaviour {
 
-    public InputManager InputManager;
+    public InputSettings InputSettings;
     public KeyCode respawnButton;//?
     public float minPosition;
     [HideInInspector]
@@ -41,11 +41,11 @@ public class RespawnPointController : MonoBehaviour {
             teleportPlayerToLastRespawnPoint();
         }
         else if (pausedGameAtSpawn && blockers == 0 && (
-            Input.GetKeyDown(InputManager.grappleLeft)
-            || Input.GetKeyDown(InputManager.grappleRight) 
-            || Input.GetKeyDown(InputManager.jump)
-            || Input.GetKeyDown(InputManager.walkLeft)
-            || Input.GetKeyDown(InputManager.walkRight)))
+            Input.GetKeyDown(InputSettings.grappleLeft)
+            || Input.GetKeyDown(InputSettings.grappleRight) 
+            || Input.GetKeyDown(InputSettings.jump)
+            || Input.GetKeyDown(InputSettings.walkLeft)
+            || Input.GetKeyDown(InputSettings.walkRight)))
         {
             rb.useGravity = true;
             pausedGameAtSpawn = false;

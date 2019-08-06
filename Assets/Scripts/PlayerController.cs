@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    public InputManager InputManager;
+    public InputSettings InputSettings;
     [HideInInspector]
     public bool isGrappling = false;
+    [HideInInspector]
+    public bool forwardIsRight = true;
     [HideInInspector]
     public Vector3 grapplePoint = new Vector3();
     public GameObject ProjectilePrefab;
@@ -35,6 +37,8 @@ public class PlayerController : MonoBehaviour {
         gpc = grappleHookProjectile.GetComponent<GrappleProjectileController>();
         rb = GetComponent<Rigidbody>();
         currentGrappleDir = KeyCode.None;
+        InputManager.instance.OnMoveLeftDown += () => { forwardIsRight = false; };
+        InputManager.instance.OnMoveRightDown += () => { forwardIsRight = true; };
     }
 	
 
@@ -43,33 +47,18 @@ public class PlayerController : MonoBehaviour {
         //check for grapple release
         if (currentGrappleDir != KeyCode.None)
         {
-            if(currentGrappleDir == InputManager.grappleLeft)
+            if (Input.GetKeyUp(InputSettings.grappleLeft))
             {
-                if (Input.GetKeyUp(InputManager.grappleLeft))
-                {
-                    releaseGrapple();
-                }
-            }
-            else //currentGrappleDir is rightKey
-            {
-                if (Input.GetKeyUp(InputManager.grappleRight))
-                {
-                    releaseGrapple();
-                }
+                releaseGrapple();
             }
         }
         //check for input to start firing a grapple out
         if (currentGrappleDir == KeyCode.None)
         {
-            if (Input.GetKeyDown(InputManager.grappleLeft))
+            if (Input.GetKeyDown(InputSettings.grappleLeft))
             {
-                fireGrapple(true);
-                currentGrappleDir = InputManager.grappleLeft;
-            }
-            else if (Input.GetKeyDown(InputManager.grappleRight))
-            {
-                fireGrapple(false);
-                currentGrappleDir = InputManager.grappleRight;
+                currentGrappleDir = InputSettings.grappleLeft;
+                fireGrapple(!forwardIsRight);
             }
         }
         //keeping the would be grapple line updated
