@@ -17,10 +17,12 @@ public class RespawnPointController : MonoBehaviour {
     private JumpController jc;
     private RespawnPointController rpc;
     private TimeManager tm;
+    private TrailRenderer tr;
 
     // Use this for initialization
     void Start()
     {
+        tr = GetComponent<TrailRenderer>();
         CurrentRespawnPoint = transform.position;
         player = GameObject.Find("Player");
         rb = player.GetComponent<Rigidbody>();
@@ -43,6 +45,13 @@ public class RespawnPointController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (pausedGameAtSpawn)
+        {
+            if(Input.GetAxisRaw("Horizontal") != 0)
+            {
+                UnfreezeGame();
+            }
+        }
         if (player.transform.position.y < minPosition)
         {
             InputManager.instance.PlayerFellOutOfBounds();
@@ -54,6 +63,7 @@ public class RespawnPointController : MonoBehaviour {
         rb.useGravity = true;
         pausedGameAtSpawn = false;
         tm.enabled = true;
+        
     }
 
     public void teleportPlayerToLastRespawnPoint()

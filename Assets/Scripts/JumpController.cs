@@ -25,7 +25,7 @@ public class JumpController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         //this check occurs every frame and is the only way to change is grounded
-        isGrounded = Physics.OverlapSphere(pc.transform.position + 0.5f * Vector3.down, 0.4f, groundedCheck).Length > 0;
+        isGrounded = Physics.OverlapSphere(pc.transform.position + (0.5f * Vector3.down), 0.2f, groundedCheck).Length > 0;
         //midair collisions maintain momentum better when a different, less friction applying physic material is used
         bc.material = (isGrounded && !pc.isGrappling) ? grounded : unGrouned;
         //need to check if grounded and should grant double jump again
