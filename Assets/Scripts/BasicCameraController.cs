@@ -72,5 +72,14 @@ public class BasicCameraController : MonoBehaviour {
 
         transform.position = Vector3.LerpUnclamped(transform.position, desiredNextCamPos, 0.1f);
 	}
+
+    public void updateFixedXPos(float newValue)
+    {
+        fixedXPos = newValue;
+    }
+    public void updateFixedYPos(float newValue)
+    {
+        fixedYPos = newValue;
+    }
 }
 

@@ -21,8 +21,24 @@ GameObject:
   - component: {fileID: 4062720461462988}
   - component: {fileID: 114257918824180342}
   - component: {fileID: 65550093714382340}
+  - component: {fileID: 114096997136432016}
   m_Layer: 13
   m_Name: Checkpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1798178221080506
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4476024775116042}
+  m_Layer: 13
+  m_Name: RespawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36,9 +52,23 @@ Transform:
   m_GameObject: {fileID: 1158530419967770}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 245, y: 8, z: 0}
-  m_LocalScale: {x: 7, y: 7, z: 7}
-  m_Children: []
+  m_LocalScale: {x: 7, y: 20, z: 7}
+  m_Children:
+  - {fileID: 4476024775116042}
   m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4476024775116042
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1798178221080506}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.13, y: -0.453, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4062720461462988}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &65550093714382340
@@ -53,6 +83,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114096997136432016
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1158530419967770}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e8b6977a4308948814bbc3ec8020d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  freezeX: 0
+  freezeY: 1
+  fixedX: 0
+  fixedY: 0
 --- !u!114 &114257918824180342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -65,4 +110,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RespawnPointController: {fileID: 0}
-  newRespawnPoint: {fileID: 4062720461462988}
+  newRespawnPoint: {fileID: 4476024775116042}

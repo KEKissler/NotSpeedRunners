@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   afterimagePoolSize: 20
-  afterimageTTL: 1
-  emmisionDelay: 0.1
+  afterimageTTL: 0.1
+  emmisionDelay: 0.001
   AfterimagePrefab: {fileID: 1269377166558860, guid: 963072fdc2c7b04409d2d9648a79613a,
     type: 2}
