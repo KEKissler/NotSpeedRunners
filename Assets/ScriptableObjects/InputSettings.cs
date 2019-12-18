@@ -8,4 +8,5 @@ public class InputSettings : ScriptableObject {
     public KeyCode walkRight;
     public KeyCode grapple;
     public KeyCode respawn;
+    public KeyCode reinstate;
 }

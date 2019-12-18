@@ -16,3 +16,4 @@ MonoBehaviour:
   walkRight: 100
   grapple: 101
   respawn: 112
+  reinstate: 111

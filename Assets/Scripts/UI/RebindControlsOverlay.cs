@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class RebindControlsOverlay : MonoBehaviour {
-    public RespawnPointController RespawnPointController;
     public InputSettings InputSettings;
     public TextMeshProUGUI walkLeftText;
     public TextMeshProUGUI walkRightText;

@@ -12,6 +12,7 @@ public class InputManager : MonoBehaviour {
     public event System.Action OnJump;
     public event System.Action OnAnyInputDown;
     public event System.Action OnRespawn;
+    public event System.Action OnReinstate;
     public static InputManager instance;
     public int HorizontalAxis = 0;
 
@@ -35,10 +36,7 @@ public class InputManager : MonoBehaviour {
                 HorizontalAxis -= 1;
                 OnMoveLeftDown.Invoke();
             }
-            if(OnAnyInputDown != null)
-            {
-                OnAnyInputDown.Invoke();
-            }
+            SafeInvoke(OnAnyInputDown);
         }
         if (Input.GetKeyUp(InputSettings.walkLeft))
         {
@@ -51,10 +49,7 @@ public class InputManager : MonoBehaviour {
                 HorizontalAxis += 1;
                 OnMoveRightDown.Invoke();
             }
-            if (OnAnyInputDown != null)
-            {
-                OnAnyInputDown.Invoke();
-            }
+            SafeInvoke(OnAnyInputDown);
         }
         if (Input.GetKeyUp(InputSettings.walkRight))
         {
@@ -62,39 +57,34 @@ public class InputManager : MonoBehaviour {
         }
         if (Input.GetKeyDown(InputSettings.grapple))
         {
-            if (OnGrappleDown != null)
-            {
-                OnGrappleDown.Invoke();
-            }
-            if (OnAnyInputDown != null)
-            {
-                OnAnyInputDown.Invoke();
-            }
+            SafeInvoke(OnGrappleDown);
+            SafeInvoke(OnAnyInputDown);
         }
         if (Input.GetKeyUp(InputSettings.grapple))
         {
-            if (OnGrappleUp != null)
-            {
-                OnGrappleUp.Invoke();
-            }
+            SafeInvoke(OnGrappleUp);
         }
         if (Input.GetKeyDown(InputSettings.jump))
         {
-            if (OnJump != null)
-            {
-                OnJump.Invoke();
-            }
-            if (OnAnyInputDown != null)
-            {
-                OnAnyInputDown.Invoke();
-            }
+            SafeInvoke(OnJump);
+            SafeInvoke(OnAnyInputDown);
         }
         if (Input.GetKeyDown(InputSettings.respawn))
         {
-            if (OnRespawn != null)
-            {
-                OnRespawn.Invoke();
-            }
+            SafeInvoke(OnRespawn);
+        }
+        if (Input.GetKeyDown(InputSettings.reinstate))
+        {
+            SafeInvoke(OnReinstate);
+            SafeInvoke(OnAnyInputDown);
+        }
+    }
+
+    private void SafeInvoke(System.Action action)
+    {
+        if(action != null)
+        {
+            action.Invoke();
         }
     }
 

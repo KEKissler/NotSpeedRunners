@@ -31,6 +31,7 @@ GameObject:
   - component: {fileID: 114313610415799382}
   - component: {fileID: 114583931019256014}
   - component: {fileID: 114917935027352748}
+  - component: {fileID: 114927255844374854}
   m_Layer: 13
   m_Name: Player
   m_TagString: Untagged
@@ -45,7 +46,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1830470511414110}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 22, z: 0}
+  m_LocalPosition: {x: 73, y: 26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -232,7 +233,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47ce3f252d9691f469d9edcc1e3c179e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSpeed: 25
+  activationThreshold: 25
+  deactivationThreshold: 20
+  alphaIncreasePerSecond: 0.5
+  alphaDecreasePerSecond: 1
+  maxAlpha: 1
 --- !u!114 &114327806152738508
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -244,7 +249,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: faab852a79198784288668d5db78ac85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputManager: {fileID: 11400000, guid: f1e00075f2a8cea4da899d00ebdffd0d, type: 2}
   jumpForce: 10
   isGrounded: 0
   hasDoubleJump: 1
@@ -286,8 +290,7 @@ MonoBehaviour:
   targetWalkSpeed: 15
   walkAccel: 20
   walkDecel: 20
-  frictionDecel: 10
-  InputManager: {fileID: 11400000, guid: f1e00075f2a8cea4da899d00ebdffd0d, type: 2}
+  frictionDecel: 5
 --- !u!114 &114799356403626340
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -299,8 +302,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08c0f1ccf76a8f41afe048a94b7d7f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InputManager: {fileID: 11400000, guid: f1e00075f2a8cea4da899d00ebdffd0d, type: 2}
   isGrappling: 0
+  forwardIsRight: 1
   grapplePoint: {x: 0, y: 0, z: 0}
   ProjectilePrefab: {fileID: 1473349282892554, guid: d6eefc7b9d7524f49be8763f4c36bc11,
     type: 2}
@@ -319,8 +322,25 @@ MonoBehaviour:
   accel: 15
   decel: 20
   maxAirSpeed: 20
-  frictionDecel: 2
-  InputManager: {fileID: 11400000, guid: f1e00075f2a8cea4da899d00ebdffd0d, type: 2}
+  frictionDecel: 0
+--- !u!114 &114927255844374854
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1830470511414110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 632d0f454f701b54e806d75ce4ea7dc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TimerPrefab: {fileID: 1237509372328104, guid: 3698aa424df58124eaf9ac5364cde79d,
+    type: 2}
+  timerColor: {r: 0, g: 1, b: 0.054581404, a: 1}
+  timerLength: 5
+  magnitudeChangeThreshold: 12
+  ignoreReinstateIfFaster: 20
+  maxReinstateMagnitude: 60
 --- !u!120 &120889231419756712
 LineRenderer:
   m_ObjectHideFlags: 1
