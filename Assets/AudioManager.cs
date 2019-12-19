@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour {
-
     public AudioClip calm;
     public AudioClip fast;
     public float fadeInDuration, fadeOutDuration;
@@ -57,11 +56,13 @@ public class AudioManager : MonoBehaviour {
     private void enable()
     {
         CrossfadeIn(fast, fadeInDuration);
+        CrossfadeOut(calm, fadeInDuration);
     }
 
     private void disable()
     {
         CrossfadeOut(fast, fadeOutDuration);
+        CrossfadeIn(calm, fadeOutDuration);
     }
 
     void Update()

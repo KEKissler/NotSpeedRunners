@@ -59,12 +59,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82ead3cec1e3b834c900ed169afef9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  calm: {fileID: 8300000, guid: 4843b079731c0e5469f884ae34524dc2, type: 3}
-  fast: {fileID: 8300000, guid: 32012ac35a92de5499f3c3b35750b193, type: 3}
+  calm: {fileID: 8300000, guid: 4fd54c53a9c54d9479bae15584bdbb57, type: 3}
+  fast: {fileID: 8300000, guid: 90eeaa77662173f49b6ea412613ef350, type: 3}
   fadeInDuration: 5
   fadeOutDuration: 2
-  activationThreshold: 1
-  deactivationThreshold: 0.01
+  activationThreshold: 20
+  deactivationThreshold: 20
   audioSourcePrefab: {fileID: 1185916300859490, guid: 2185eb8a61b9a1f44930e238ff56ef2b,
     type: 2}
   player: {fileID: 0}
