@@ -22,7 +22,6 @@ public class AfterimageController : MonoBehaviour {
 
     public void Reset(Transform toCopy)
     {
-        Debug.Log(toCopy.name);
         timeSinceReset = 0;
         transform.position = toCopy.position;
         Quaternion newRotation = new Quaternion();
