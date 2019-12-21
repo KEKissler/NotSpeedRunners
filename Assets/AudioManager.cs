@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour {
+    public AudioClip oneshotBGM;
     public AudioClip BGM;
     public AudioClip calm;
     public AudioClip fast;
@@ -34,12 +35,27 @@ public class AudioManager : MonoBehaviour {
         player = GameObject.Find("Player").GetComponent<Rigidbody>();
         DontDestroyOnLoad(gameObject);
 
-        InitClip(BGM);
+        if(oneshotBGM != null)
+        {
+            InitClip(oneshotBGM);
+            PlayImmediately(oneshotBGM);
+            Invoke("StartBGM", oneshotBGM.length);
+        }
+        else
+        {
+            StartBGM();
+        }
         InitClip(calm);
         InitClip(fast);
-
-        PlayImmediately(BGM);
+        
         PlayImmediately(calm);
+    }
+
+    private void StartBGM()
+    {
+        StopImmediately(oneshotBGM);
+        InitClip(BGM);
+        PlayImmediately(BGM);
     }
 
     private void InitClip(AudioClip clip)

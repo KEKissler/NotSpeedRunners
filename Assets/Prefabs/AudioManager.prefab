@@ -59,7 +59,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82ead3cec1e3b834c900ed169afef9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BGM: {fileID: 8300000, guid: e38d0a67d11434d47967c64f54db11f4, type: 3}
+  oneshotBGM: {fileID: 8300000, guid: e3b800ce21d8dbb4eb96482535f39709, type: 3}
+  BGM: {fileID: 8300000, guid: 71b108d405151f747ab4cd80265cefa4, type: 3}
   calm: {fileID: 0}
   fast: {fileID: 0}
   fadeInDuration: 5
