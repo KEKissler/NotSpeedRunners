@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour {
+    public AudioClip BGM;
     public AudioClip calm;
     public AudioClip fast;
     public float fadeInDuration, fadeOutDuration;
@@ -33,14 +34,17 @@ public class AudioManager : MonoBehaviour {
         player = GameObject.Find("Player").GetComponent<Rigidbody>();
         DontDestroyOnLoad(gameObject);
 
+        InitClip(BGM);
         InitClip(calm);
         InitClip(fast);
+
+        PlayImmediately(BGM);
         PlayImmediately(calm);
     }
 
     private void InitClip(AudioClip clip)
     {
-        if (SourceMap.ContainsKey(clip))
+        if (SourceMap.ContainsKey(clip) || clip == null)
         {
             return;
         }
@@ -87,6 +91,10 @@ public class AudioManager : MonoBehaviour {
 
     private void PlayImmediately(AudioClip clip)
     {
+        if(clip == null)
+        {
+            return;
+        }
         if (!SourceMap.ContainsKey(clip))
         {
             Debug.Log("No clip " + clip.name + " found.\nDid you forget to Initilize it?");
@@ -103,6 +111,10 @@ public class AudioManager : MonoBehaviour {
 
     private void StopImmediately(AudioClip clip)
     {
+        if (clip == null)
+        {
+            return;
+        }
         if (!SourceMap.ContainsKey(clip))
         {
             Debug.Log("No clip " + clip.name + " found.\nDid you forget to Initilize it?");
@@ -119,6 +131,10 @@ public class AudioManager : MonoBehaviour {
 
     private void CrossfadeIn(AudioClip clip, float crossfadeDuration)
     {
+        if (clip == null)
+        {
+            return;
+        }
         if (!SourceMap.ContainsKey(clip))
         {
             Debug.Log("No clip " + clip.name + " found.\nDid you forget to Initilize it?");
@@ -134,6 +150,10 @@ public class AudioManager : MonoBehaviour {
 
     private void CrossfadeOut(AudioClip clip, float crossfadeDuration)
     {
+        if (clip == null)
+        {
+            return;
+        }
         if (!SourceMap.ContainsKey(clip))
         {
             Debug.Log("No clip " + clip.name + " found.\nDid you forget to Initilize it?");

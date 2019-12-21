@@ -1658,16 +1658,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 14
       objectReference: {fileID: 0}
-    - target: {fileID: 114054480019375954, guid: f4b2d082040f76a46ac69666ff43ad8c,
-        type: 2}
-      propertyPath: emmisionDelay
-      value: 0.08
-      objectReference: {fileID: 0}
-    - target: {fileID: 114054480019375954, guid: f4b2d082040f76a46ac69666ff43ad8c,
-        type: 2}
-      propertyPath: afterimagePoolSize
-      value: 100
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4b2d082040f76a46ac69666ff43ad8c, type: 2}
   m_IsPrefabAsset: 0
