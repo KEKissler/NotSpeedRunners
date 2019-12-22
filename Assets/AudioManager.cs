@@ -38,6 +38,8 @@ public class AudioManager : MonoBehaviour {
         if(oneshotBGM != null)
         {
             InitClip(oneshotBGM);
+            InitClip(BGM);
+            SourceMap[oneshotBGM].loop = false;
             PlayImmediately(oneshotBGM);
             Invoke("StartBGM", oneshotBGM.length);
         }
@@ -54,7 +56,6 @@ public class AudioManager : MonoBehaviour {
     private void StartBGM()
     {
         StopImmediately(oneshotBGM);
-        InitClip(BGM);
         PlayImmediately(BGM);
     }
 
