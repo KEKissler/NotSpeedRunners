@@ -56,6 +56,10 @@ public class AudioManager : MonoBehaviour {
     private void StartBGM()
     {
         StopImmediately(oneshotBGM);
+        if (BGM != null)
+        {
+            SourceMap[BGM].time = 0;
+        }
         PlayImmediately(BGM);
     }
 
