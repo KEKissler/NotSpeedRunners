@@ -86,7 +86,7 @@ public class RespawnPointController : MonoBehaviour {
             }
         }
         //and reset the timer
-        tm.resetCurrentTime();
+        tm.ResetCurrentTime();
         //start timer out as stopped
         tm.enabled = false;
         pausedGameAtSpawn = true;

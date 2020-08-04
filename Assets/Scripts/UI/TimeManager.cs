@@ -1,12 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class TimeManager : MonoBehaviour {
-    public Text best, current;
-
-    private float bestTime, currentTime;
+public class TimeManager : MonoBehaviour
+{
+    public Text best;
+    public Text current;
+    public float bestTime { get; private set; }
+    public float currentTime { get; private set; }
+    
     private bool finished = false;
 	
     void Start () {
@@ -27,7 +28,7 @@ public class TimeManager : MonoBehaviour {
         current.text = TimeToString(currentTime);
 	}
 
-    private string TimeToString(float time)
+    public static string TimeToString(float time)
     {
         int mod = 0;
         while(time > 60)
@@ -47,12 +48,11 @@ public class TimeManager : MonoBehaviour {
         }
     }
 
-    public void resetCurrentTime()
+    public void ResetCurrentTime(float bestTime = 0)
     {
         currentTime = 0;
         current.text = TimeToString(currentTime);
+        best.text = bestTime <= 0 ? "-:-.--" : TimeToString(bestTime);
         finished = false;
     }
-
-
 }
