@@ -8,14 +8,13 @@ public class TimeManager : MonoBehaviour {
 
     private float bestTime, currentTime;
     private bool finished = false;
-	// Use this for initialization
-	void Start () {
+	
+    void Start () {
         bestTime = float.MaxValue;
         currentTime = 0;
         
 	}
 	
-	// Update is called once per frame
 	void Update () {
         if (finished)
             return;
