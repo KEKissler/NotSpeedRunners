@@ -26,9 +26,26 @@ public class InputManager : MonoBehaviour {
             instance = this;
         }
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    public void UpdateInputOnNewLevelLoad()
+    {
+        HorizontalAxis += Input.GetKey(InputSettings.walkLeft) ? -1 : 0;
+        HorizontalAxis += Input.GetKey(InputSettings.walkRight) ? 1 : 0;
+
+        if (Input.GetKey(InputSettings.grapple))
+        {
+            SafeInvoke(OnGrappleDown);
+            SafeInvoke(OnAnyInputDown);
+        }
+        if (Input.GetKey(InputSettings.jump))
+        {
+            SafeInvoke(OnJump);
+            SafeInvoke(OnAnyInputDown);
+        }
+    }
+
+    // Update is called once per frame
+    void Update () {
         if (Input.GetKeyDown(InputSettings.walkLeft))
         {
             if(OnMoveLeftDown != null)

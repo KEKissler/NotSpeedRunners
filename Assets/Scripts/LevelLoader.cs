@@ -44,6 +44,7 @@ public class LevelLoader : MonoBehaviour {
                 TargetController.RemainingTargets = 0;
                 SceneManager.LoadScene(i, LoadSceneMode.Single);
                 rpc = GameObject.Find("RespawnPoint").GetComponent<RespawnPointController>();
+                InputManager.instance.UpdateInputOnNewLevelLoad();
                 break;
             }
         }
