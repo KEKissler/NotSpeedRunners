@@ -11702,7 +11702,7 @@ Prefab:
     - target: {fileID: 114581740497003944, guid: 7a0f705c13fb43045b631a614d99ad48,
         type: 2}
       propertyPath: setVelocity.y
-      value: 25
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1282123945879724, guid: 7a0f705c13fb43045b631a614d99ad48, type: 2}
       propertyPath: m_Name
