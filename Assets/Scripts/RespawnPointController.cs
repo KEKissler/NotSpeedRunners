@@ -11,26 +11,24 @@ public class RespawnPointController : MonoBehaviour {
     public int blockers = 0;
 
     private bool pausedGameAtSpawn = true;
-    private GameObject player, targets;
+    private GameObject player;
     private Rigidbody rb;
     private PlayerController pc;
     private JumpController jc;
-    private RespawnPointController rpc;
     private TimeManager tm;
-    private TrailRenderer tr;
+    private TargetManager targetManager;
 
     // Use this for initialization
     void Start()
     {
-        tr = GetComponent<TrailRenderer>();
         CurrentRespawnPoint = transform.position;
         player = GameObject.Find("Player");
         rb = player.GetComponent<Rigidbody>();
         pc = player.GetComponent<PlayerController>();
         jc = player.GetComponent<JumpController>();
-        targets = GameObject.Find("Targets");
-        rpc = targets.GetComponent<RespawnPointController>();
         tm = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+        targetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
+
         tm.enabled = false;
         rb.useGravity = false;
         InputManager.instance.OnAnyInputDown += () =>
@@ -77,14 +75,7 @@ public class RespawnPointController : MonoBehaviour {
         //and grant double jump back
         jc.hasDoubleJump = true;
         //and reset all targets
-        foreach (Transform t in targets.transform)
-        {
-            if (!t.gameObject.activeSelf)
-            {
-                ++TargetController.RemainingTargets;
-                t.gameObject.SetActive(true);
-            }
-        }
+        targetManager.ResetAllTargets();
         //and reset the timer
         tm.ResetCurrentTime();
         //start timer out as stopped

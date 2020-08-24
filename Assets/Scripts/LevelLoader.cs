@@ -1,33 +1,65 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
-public class LevelLoader : MonoBehaviour {
+public class LevelLoader : MonoBehaviour
+{
+    public int FirstSceneIndex;
+    public List<string> TrackedSceneNames = new List<string>();
 
-    public static LevelLoader instance;
-    private RespawnPointController rpc;//a copy of the active rpc in the active scene
+    private static LevelLoader instance;
+    private RespawnPointController RespawnPointController;
+    private TargetManager TargetManager;
+    private List<Scene> ActiveAdditiveScenes = new List<Scene>();
+    private Coroutine currentAsyncOperations;
+    private string[] scenePaths;
+    private AssetBundle bundle;
 
-	void Awake () {
-        //Check if instance already exists
-        if (instance == null)
-
-            //if not, set instance to this
-            instance = this;
-
-        //If instance already exists and it's not this:
-        else if (instance != this)
-
-            //Then destroy this. This enforces our singleton pattern, meaning there can only ever be one instance of a GameManager.
+	void Awake ()
+    {
+        if (instance != null)
+        {
             Destroy(gameObject);
-
-        //Sets this to not be destroyed when reloading scene
+            return;
+        }
+        instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
-    void Start()
+    public IEnumerator Start()
     {
-        rpc = GameObject.Find("RespawnPoint").GetComponent<RespawnPointController>();
+        TargetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
+        yield return StartCoroutine(DownloadAssetBundle("levels"));
+
+        if (bundle == null)
+        {
+            Debug.Log("Failed to load AssetBundle!");
+            yield break;
+        }
+        scenePaths = bundle.GetAllScenePaths();
+        LoadScene(scenePaths[FirstSceneIndex]);
+    }
+
+    private IEnumerator DownloadAssetBundle(string assetBundleName)
+    {
+        string uri = "file:///" + Application.dataPath + "/AssetBundles/" + assetBundleName;
+        Debug.Log("Trying to download asset bundle from: " + uri);
+        using (var request = UnityWebRequestAssetBundle.GetAssetBundle(uri))
+        {
+            yield return request.SendWebRequest(); 
+            if (request.isNetworkError || request.isHttpError)
+            {
+                Debug.Log(request.error);
+            }
+            else
+            {
+                bundle = DownloadHandlerAssetBundle.GetContent(request);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -38,14 +70,76 @@ public class LevelLoader : MonoBehaviour {
             {
                 if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(i))
                 {
-                    rpc.teleportPlayerToLastRespawnPoint();
+                    if (RespawnPointController == null)
+                    {
+                        RespawnPointController = GameObject.Find("RespawnPoint").GetComponent<RespawnPointController>();
+                    }
+                    RespawnPointController.teleportPlayerToLastRespawnPoint();
                     break;
                 }
-                TargetController.RemainingTargets = 0;
-                SceneManager.LoadScene(i, LoadSceneMode.Single);
-                rpc = GameObject.Find("RespawnPoint").GetComponent<RespawnPointController>();
+                LoadScene(TrackedSceneNames[i]);
                 break;
             }
         }
+    }
+
+    private void LoadScene(string sceneName)
+    {
+        var asyncOperations = new List<AsyncOperation>();
+        asyncOperations.Add(SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive));
+        //for now, unload all but the Startup Scene so that there is always Startup and the Additive Scene present
+        foreach (var additiveScene in ActiveAdditiveScenes)
+        {
+            asyncOperations.Add(SceneManager.UnloadSceneAsync(additiveScene));
+        }
+
+        if (currentAsyncOperations != null)
+        {
+            Debug.LogWarning("Ignored request to load scene" + sceneName + ", still processing last load.");
+            return;
+        }
+        currentAsyncOperations = StartCoroutine(WaitForAsyncOperations(asyncOperations, () =>
+        {
+            var scene = SceneManager.GetSceneByName(sceneName);
+            TargetManager.Initialize();
+            NewSceneFinishedLoading(scene);
+            currentAsyncOperations = null;
+        }));
+    }
+
+    private IEnumerator WaitForAsyncOperations(List<AsyncOperation> operations, Action finished)
+    {
+        while (!AllOperationsAreDone(operations))
+        {
+            yield return null;
+        }
+        if (finished != null)
+        {
+            finished.Invoke();
+        }
+    }
+
+    private static bool AllOperationsAreDone(List<AsyncOperation> operations)
+    {
+        var allFinished = true;
+        foreach (var asyncOperation in operations)
+        {
+            if (!asyncOperation.isDone)
+            {
+                allFinished = false;
+                break;
+            }
+        }
+        return allFinished;
+    }
+
+    private void NewSceneFinishedLoading(Scene scene)
+    {
+        ActiveAdditiveScenes.Add(scene);
+        RespawnPointController = GameObject.Find("RespawnPoint").GetComponent<RespawnPointController>();
+        RespawnPointController.teleportPlayerToLastRespawnPoint();
+        var targetParent = GameObject.Find("Targets").transform;
+        var targetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
+        targetManager.targets = targetParent;
     }
 }

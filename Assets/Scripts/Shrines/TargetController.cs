@@ -7,24 +7,18 @@ public class TargetController : MonoBehaviour {
     public GameObject particleEmitterPrefab;
     public float particleTTL;
     public float particleForceMult;
-    [HideInInspector]
-	public static int RemainingTargets = 0;
-    private TimeManager tm;
+
+    private TargetManager TargetManager;
 
     void Start()
     {
-        ++RemainingTargets;
-        tm = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+        TargetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
     }
 
     void OnTriggerEnter(Collider other)
     {
         gameObject.SetActive(false);
-        --RemainingTargets;
-        if(RemainingTargets == 0)
-        {
-            tm.OnEndCurrentTimer();
-        }
+        --TargetManager.RemainingTargets;
         GameObject toEdit = Instantiate(particleEmitterPrefab, transform.position, Quaternion.identity);
         ParticleSystem particles = toEdit.GetComponent<ParticleSystem>();
         ParticleSystem.ShapeModule s = particles.shape;

@@ -13,8 +13,7 @@ public class SlipstreamManager : MonoBehaviour
     public Material yellow;
     public Material white;
 
-    public AfterimageManager AfterimageManager;
-
+    private AfterimageManager afterimageManager;
     private bool active = false;
     private Rigidbody player;
     private MeshRenderer MeshRenderer;
@@ -24,6 +23,7 @@ public class SlipstreamManager : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<Rigidbody>();
+        afterimageManager = GameObject.Find("AfterimageManager").GetComponent<AfterimageManager>();
         MeshRenderer = player.GetComponent<MeshRenderer>();
         for (int i = 0; i < transform.childCount; ++i)
         {
@@ -35,7 +35,7 @@ public class SlipstreamManager : MonoBehaviour
 
     private void enable()
     {
-        AfterimageManager.Emitting = false;
+        afterimageManager.Emitting = false;
         MeshRenderer.material = white;
         foreach(BoxCollider boxCol in boxColliders)
         {
@@ -49,7 +49,7 @@ public class SlipstreamManager : MonoBehaviour
 
     private void disable()
     {
-        AfterimageManager.Emitting = true;
+        afterimageManager.Emitting = true;
         MeshRenderer.material = yellow;
         foreach (BoxCollider boxCol in boxColliders)
         {
