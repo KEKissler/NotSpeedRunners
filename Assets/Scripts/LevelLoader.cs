@@ -41,13 +41,20 @@ public class LevelLoader : MonoBehaviour
             yield break;
         }
         scenePaths = bundle.GetAllScenePaths();
-        LoadScene(scenePaths[FirstSceneIndex]);
+        Time.timeScale = 0;
+        LoadScene(scenePaths[FirstSceneIndex], () =>
+        {
+            Time.timeScale = 1;
+        });
     }
 
     private IEnumerator DownloadAssetBundle(string assetBundleName)
     {
-        string uri = "file:///" + Application.dataPath + "/AssetBundles/" + assetBundleName;
-        Debug.Log("Trying to download asset bundle from: " + uri);
+
+        string uri = Application.dataPath + "/AssetBundles/" + assetBundleName;
+#if UNITY_EDITOR
+        uri =  "file:///" + uri;  
+#endif
         using (var request = UnityWebRequestAssetBundle.GetAssetBundle(uri))
         {
             yield return request.SendWebRequest(); 
@@ -83,7 +90,7 @@ public class LevelLoader : MonoBehaviour
         }
     }
 
-    private void LoadScene(string sceneName)
+    private void LoadScene(string sceneName, Action finished = null)
     {
         var asyncOperations = new List<AsyncOperation>();
         asyncOperations.Add(SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive));
@@ -104,6 +111,10 @@ public class LevelLoader : MonoBehaviour
             TargetManager.Initialize();
             NewSceneFinishedLoading(scene);
             currentAsyncOperations = null;
+            if (finished != null)
+            {
+                finished.Invoke();
+            }
         }));
     }
 
