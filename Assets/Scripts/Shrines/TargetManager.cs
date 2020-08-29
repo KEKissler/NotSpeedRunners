@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class TargetManager : MonoBehaviour
 {
+	public TimeManager TimeManager;
 	public int RemainingTargets
 	{
 		get { return numTargets; }
@@ -15,7 +17,7 @@ public class TargetManager : MonoBehaviour
 			numTargets = value;
 			if (numTargets <= 0)
 			{
-				timeManager.OnEndCurrentTimer();
+				TimeManager.OnEndCurrentTimer();
 			}
 		}
 	}
@@ -23,7 +25,6 @@ public class TargetManager : MonoBehaviour
 
 	private int numTargets;
 	private static TargetManager instance;
-	private TimeManager timeManager;
 	
 	public void Awake ()
 	{
@@ -36,9 +37,13 @@ public class TargetManager : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 	}
 
+	public void Start()
+	{
+		Initialize();
+	}
+
 	public void Initialize ()
 	{
-		timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 		targets = GameObject.Find("Targets").transform;
 	}
 

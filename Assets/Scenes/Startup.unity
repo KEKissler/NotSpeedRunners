@@ -576,6 +576,12 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 744853853}
   m_CullTransparentMesh: 0
+--- !u!114 &871182326 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114948675990693898, guid: a94de825738b68f4ea5f4691fd5a7966,
+    type: 2}
+  m_PrefabInternal: {fileID: 1857968461}
+  m_Script: {fileID: 11500000, guid: 2a445a110f8f9924bb56e949ae55389e, type: 3}
 --- !u!1001 &882845335
 Prefab:
   m_ObjectHideFlags: 0
@@ -1031,7 +1037,7 @@ Prefab:
     - target: {fileID: 114390248711367556, guid: 06b0a8de4708b1444af49e750ec20544,
         type: 2}
       propertyPath: TrackedSceneNames.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114390248711367556, guid: 06b0a8de4708b1444af49e750ec20544,
         type: 2}
@@ -1094,6 +1100,21 @@ Prefab:
         type: 2}
       propertyPath: TrackedSceneNames.Array.data[0]
       value: Scene/1.unity
+      objectReference: {fileID: 0}
+    - target: {fileID: 114390248711367556, guid: 06b0a8de4708b1444af49e750ec20544,
+        type: 2}
+      propertyPath: TargetManager
+      value: 
+      objectReference: {fileID: 871182326}
+    - target: {fileID: 114390248711367556, guid: 06b0a8de4708b1444af49e750ec20544,
+        type: 2}
+      propertyPath: TrackedSceneNames.Array.data[1]
+      value: Scene/2.unity
+      objectReference: {fileID: 0}
+    - target: {fileID: 114390248711367556, guid: 06b0a8de4708b1444af49e750ec20544,
+        type: 2}
+      propertyPath: FirstSceneIndex
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06b0a8de4708b1444af49e750ec20544, type: 2}
@@ -1205,6 +1226,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 114948675990693898, guid: a94de825738b68f4ea5f4691fd5a7966,
+        type: 2}
+      propertyPath: TimeManager
+      value: 
+      objectReference: {fileID: 262036258}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a94de825738b68f4ea5f4691fd5a7966, type: 2}
   m_IsPrefabAsset: 0

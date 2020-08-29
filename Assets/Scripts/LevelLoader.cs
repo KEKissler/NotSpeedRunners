@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 public class LevelLoader : MonoBehaviour
 {
+    public TargetManager TargetManager;
     public int FirstSceneIndex;
-    public List<string> TrackedSceneNames = new List<string>();
 
     private static LevelLoader instance;
     private RespawnPointController RespawnPointController;
-    private TargetManager TargetManager;
-    private List<Scene> ActiveAdditiveScenes = new List<Scene>();
+    private readonly List<Scene> ActiveAdditiveScenes = new List<Scene>();
     private Coroutine currentAsyncOperations;
-    private string[] scenePaths;
+    private string[] scenePaths = new string[0];
     private AssetBundle bundle;
 
 	void Awake ()
@@ -32,7 +30,6 @@ public class LevelLoader : MonoBehaviour
 
     public IEnumerator Start()
     {
-        TargetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
         yield return StartCoroutine(DownloadAssetBundle("levels"));
 
         if (bundle == null)
@@ -41,11 +38,15 @@ public class LevelLoader : MonoBehaviour
             yield break;
         }
         scenePaths = bundle.GetAllScenePaths();
-        Time.timeScale = 0;
-        LoadScene(scenePaths[FirstSceneIndex], () =>
+        for (var i = 0; i < SceneManager.sceneCount; ++i)
         {
-            Time.timeScale = 1;
-        });
+            var scene = SceneManager.GetSceneAt(i);
+            if (scene.name != "Startup")
+            {
+                ActiveAdditiveScenes.Add(scene);
+            }
+        }
+        LoadScene(scenePaths[FirstSceneIndex]);
     }
 
     private IEnumerator DownloadAssetBundle(string assetBundleName)
@@ -69,22 +70,12 @@ public class LevelLoader : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update () {
-        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; ++i)
+    public void Update () {
+        for (var i = 0; i < scenePaths.Length; ++i)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
-                if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(i))
-                {
-                    if (RespawnPointController == null)
-                    {
-                        RespawnPointController = GameObject.Find("RespawnPoint").GetComponent<RespawnPointController>();
-                    }
-                    RespawnPointController.teleportPlayerToLastRespawnPoint();
-                    break;
-                }
-                LoadScene(TrackedSceneNames[i]);
+                LoadScene(scenePaths[i]);
                 break;
             }
         }
@@ -92,29 +83,59 @@ public class LevelLoader : MonoBehaviour
 
     private void LoadScene(string sceneName, Action finished = null)
     {
-        var asyncOperations = new List<AsyncOperation>();
-        asyncOperations.Add(SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive));
-        //for now, unload all but the Startup Scene so that there is always Startup and the Additive Scene present
-        foreach (var additiveScene in ActiveAdditiveScenes)
-        {
-            asyncOperations.Add(SceneManager.UnloadSceneAsync(additiveScene));
-        }
-
         if (currentAsyncOperations != null)
         {
-            Debug.LogWarning("Ignored request to load scene" + sceneName + ", still processing last load.");
-            return;
-        }
-        currentAsyncOperations = StartCoroutine(WaitForAsyncOperations(asyncOperations, () =>
-        {
-            var scene = SceneManager.GetSceneByName(sceneName);
-            TargetManager.Initialize();
-            NewSceneFinishedLoading(scene);
-            currentAsyncOperations = null;
+            Debug.LogWarning("Ignored request to load scene " + sceneName + ", still processing last load.");
             if (finished != null)
             {
                 finished.Invoke();
             }
+            return;
+        }
+
+        var alreadyLoadedScene = SceneManager.GetSceneByName(sceneName);
+        foreach (var scene in ActiveAdditiveScenes)
+        {
+            if (scene.path.Equals(sceneName) || scene.name.Equals(sceneName))
+            {
+                alreadyLoadedScene = scene;
+            }
+        }
+        if (alreadyLoadedScene.isLoaded)
+        {
+            Debug.LogWarning("Ignored request to load scene " + alreadyLoadedScene.name + ", it's already loaded!\nStill initializing scene from current state.");
+            InitializeScene(alreadyLoadedScene, finished);
+            if (finished != null)
+            {
+                finished.Invoke();
+            }
+            return;
+        }
+        Time.timeScale = 0;
+        var asyncOperations = new List<AsyncOperation>();
+        asyncOperations.Add(SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive));
+        //for now, unload all but the Startup Scene so that there is always Startup and the Additive Scene present
+        var toRemove = new List<Scene>();
+        foreach (var additiveScene in ActiveAdditiveScenes)
+        {
+            asyncOperations.Add(SceneManager.UnloadSceneAsync(additiveScene));
+            toRemove.Add(additiveScene);
+        }
+        foreach (var scene in toRemove)
+        {
+            ActiveAdditiveScenes.Remove(scene);
+        }
+        currentAsyncOperations = StartCoroutine(WaitForAsyncOperations(asyncOperations, () =>
+        {
+            var scene = SceneManager.GetSceneByName(sceneName);
+            if (!scene.isLoaded)
+            {
+                scene = SceneManager.GetSceneByPath(sceneName);
+            }
+            ActiveAdditiveScenes.Add(scene);
+            InitializeScene(scene, finished);
+            Time.timeScale = 1;
+            currentAsyncOperations = null;
         }));
     }
 
@@ -144,13 +165,24 @@ public class LevelLoader : MonoBehaviour
         return allFinished;
     }
 
-    private void NewSceneFinishedLoading(Scene scene)
+    private void InitializeScene(Scene scene, Action finished = null)
     {
-        ActiveAdditiveScenes.Add(scene);
-        RespawnPointController = GameObject.Find("RespawnPoint").GetComponent<RespawnPointController>();
+        if (scene.isLoaded == false)
+        {
+            Debug.LogError("Cannot initialize unloaded scene \"" + scene.name + "\".");
+            if (finished != null)
+            {
+                finished.Invoke();
+            }
+            return;
+        }
+        TargetManager.Initialize();
+        RespawnPointController = FindObjectOfType<RespawnPointController>();
         RespawnPointController.teleportPlayerToLastRespawnPoint();
-        var targetParent = GameObject.Find("Targets").transform;
-        var targetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
-        targetManager.targets = targetParent;
+        TargetManager.targets = GameObject.Find("Targets").transform;
+        if (finished != null)
+        {
+            finished.Invoke();
+        }
     }
 }
