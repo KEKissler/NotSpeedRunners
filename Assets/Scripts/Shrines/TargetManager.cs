@@ -24,7 +24,7 @@ public class TargetManager : MonoBehaviour
 	[HideInInspector] public Transform targets;
 
 	private int numTargets;
-	private static TargetManager instance;
+	public static TargetManager instance;
 	
 	public void Awake ()
 	{
@@ -35,16 +35,6 @@ public class TargetManager : MonoBehaviour
 		}
 		instance = this;
 		DontDestroyOnLoad(gameObject);
-	}
-
-	public void Start()
-	{
-		Initialize();
-	}
-
-	public void Initialize ()
-	{
-		targets = GameObject.Find("Targets").transform;
 	}
 
 	public void ResetAllTargets()

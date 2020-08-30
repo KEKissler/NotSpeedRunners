@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelLoader : MonoBehaviour
 {
-    public TargetManager TargetManager;
+    // public TargetManager TargetManager;
     public int FirstSceneIndex;
 
     private static LevelLoader instance;
@@ -176,10 +176,9 @@ public class LevelLoader : MonoBehaviour
             }
             return;
         }
-        TargetManager.Initialize();
+        TargetManager.instance.targets = GameObject.Find("Targets").transform;
         RespawnPointController = FindObjectOfType<RespawnPointController>();
         RespawnPointController.teleportPlayerToLastRespawnPoint();
-        TargetManager.targets = GameObject.Find("Targets").transform;
         if (finished != null)
         {
             finished.Invoke();

@@ -1,43 +1,16 @@
-﻿/*using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BasicCameraController : MonoBehaviour {
-    //x dir is all
-    public GameObject player;
-    public float lerpAmount;
-    public float velocityPredictAmount;
-
-    private float fixedYPos;
-    private float fixedZPos;
-    private GrappleMovementController gmc;
-    private Rigidbody rb;
-	// Use this for initialization
-	void Start () {
-        fixedZPos = transform.position.z;
-        fixedYPos = transform.position.y;
-        rb = player.GetComponent<Rigidbody>();
-    }
-	
-	// Update is called once per frame
-	void Update () {
-        transform.position = Vector3.LerpUnclamped(transform.position, new Vector3(player.transform.position[0] + rb.velocity[0] * velocityPredictAmount, fixedYPos, fixedZPos), lerpAmount * Time.deltaTime);
-	}
-}*/
-
- using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class BasicCameraController : MonoBehaviour {
-    //x dir is all
     public GameObject player;
     public float baseLerpAmount;
     public float lerpAmpBySpeed;
     public float velocityPredictAmount;
     public bool freezeXPos;
     public bool freezeYPos;
-
+    public float desiredCameraSize;
+    public float maxSizeChangePercentPerSecond;
 
 
     private float fixedXPos;
@@ -45,15 +18,16 @@ public class BasicCameraController : MonoBehaviour {
     private float fixedYPos;
     private GrappleMovementController gmc;
     private Rigidbody rb;
-	// Use this for initialization
-	void Start () {
+    private Camera camera;
+
+    void Start () {
         fixedXPos = transform.position.x;
         fixedZPos = transform.position.z;
         fixedYPos = transform.position.y;
         rb = player.GetComponent<Rigidbody>();
+        camera = GetComponent<Camera>();
     }
 	
-	// Update is called once per frame
 	void Update () {
         float lerpAmount = baseLerpAmount + lerpAmpBySpeed * Vector2.Distance((Vector2)(rb.position), (Vector2)(transform.position));
         Vector3 desiredNextCamPos =
@@ -71,12 +45,32 @@ public class BasicCameraController : MonoBehaviour {
                 lerpAmount * Time.deltaTime);
 
         transform.position = Vector3.LerpUnclamped(transform.position, desiredNextCamPos, 0.1f);
+        UpdateCameraOrthographicSize();
 	}
 
+    private void UpdateCameraOrthographicSize()
+    {
+        var currentCamSize = camera.orthographicSize;
+        if (desiredCameraSize == currentCamSize)
+        {
+            return;
+        }
+        var maxChangeThisFrame = currentCamSize * ((maxSizeChangePercentPerSecond / 100) * Time.deltaTime);
+        if (Mathf.Abs(desiredCameraSize - currentCamSize) < maxChangeThisFrame)
+        {
+            camera.orthographicSize = desiredCameraSize;
+            return;
+        }
+
+        var shouldIncreaseSize = desiredCameraSize > currentCamSize;
+        camera.orthographicSize += (shouldIncreaseSize ? 1 : -1) * maxChangeThisFrame;
+    }
+    
     public void updateFixedXPos(float newValue)
     {
         fixedXPos = newValue;
     }
+    
     public void updateFixedYPos(float newValue)
     {
         fixedYPos = newValue;

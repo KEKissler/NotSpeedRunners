@@ -513,11 +513,11 @@ Prefab:
       objectReference: {fileID: 1409645904}
     - target: {fileID: 4476024775116042, guid: a7a80113c340afd408058878f0f9fa3c, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -0.266
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4476024775116042, guid: a7a80113c340afd408058878f0f9fa3c, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0.114
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4062720461462988, guid: a7a80113c340afd408058878f0f9fa3c, type: 2}
       propertyPath: m_RootOrder
@@ -547,6 +547,11 @@ Prefab:
     - target: {fileID: 1158530419967770, guid: a7a80113c340afd408058878f0f9fa3c, type: 2}
       propertyPath: m_Name
       value: Checkpoint (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114096997136432016, guid: a7a80113c340afd408058878f0f9fa3c,
+        type: 2}
+      propertyPath: size
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7a80113c340afd408058878f0f9fa3c, type: 2}

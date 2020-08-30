@@ -5,10 +5,12 @@ using UnityEngine;
 public class CameraBehaviorTrigger : MonoBehaviour {
     public bool freezeX, freezeY;
     public float fixedX, fixedY;
+    public float size = 12;
     private BasicCameraController basicCameraController;
+    
     public void Start()
     {
-        basicCameraController = GameObject.Find("Main Camera").GetComponent<BasicCameraController>();
+        basicCameraController = FindObjectOfType<BasicCameraController>();
     }
 
     public void OnTriggerEnter(Collider other)
@@ -17,5 +19,6 @@ public class CameraBehaviorTrigger : MonoBehaviour {
         basicCameraController.updateFixedYPos(fixedY);
         basicCameraController.freezeYPos = freezeY;
         basicCameraController.freezeXPos = freezeX;
+        basicCameraController.desiredCameraSize = size;
     }
 }
