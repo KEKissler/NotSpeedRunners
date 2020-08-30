@@ -39,6 +39,10 @@ public class TargetManager : MonoBehaviour
 
 	public void ResetAllTargets()
 	{
+		if (targets == null)
+		{
+			return;
+		}
 		foreach (Transform t in targets)
 		{
 			t.gameObject.SetActive(true);
