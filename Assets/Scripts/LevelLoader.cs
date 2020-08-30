@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -29,6 +30,7 @@ public class LevelLoader : MonoBehaviour
 
     public IEnumerator Start()
     {
+#if !UNITY_EDITOR
         yield return StartCoroutine(DownloadAssetBundle("levels"));
 
         if (bundle == null)
@@ -36,7 +38,16 @@ public class LevelLoader : MonoBehaviour
             Debug.Log("Failed to load AssetBundle!");
             yield break;
         }
+
         scenePaths = bundle.GetAllScenePaths();
+#else
+        var paths = new List<string>();
+        foreach (var guid in AssetDatabase.FindAssets("t:scene", new[] {"Assets/Scenes/LevelsAssetBundle"}))
+        {
+            paths.Add(AssetDatabase.GUIDToAssetPath(guid));
+        }
+        scenePaths = paths.ToArray();
+#endif
         for (var i = 0; i < SceneManager.sceneCount; ++i)
         {
             var scene = SceneManager.GetSceneAt(i);
@@ -46,11 +57,11 @@ public class LevelLoader : MonoBehaviour
             }
         }
         LoadScene(scenePaths[FirstSceneIndex]);
+        yield break;
     }
 
     private IEnumerator DownloadAssetBundle(string assetBundleName)
     {
-
         string uri = Application.dataPath + "/AssetBundles/" + assetBundleName;
 #if UNITY_EDITOR
         uri =  "file:///" + uri;  
