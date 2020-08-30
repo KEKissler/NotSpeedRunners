@@ -7,7 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class LevelLoader : MonoBehaviour
 {
-    // public TargetManager TargetManager;
     public int FirstSceneIndex;
 
     private static LevelLoader instance;
