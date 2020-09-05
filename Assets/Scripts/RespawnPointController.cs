@@ -17,9 +17,11 @@ public class RespawnPointController : MonoBehaviour {
     private JumpController jc;
     private TimeManager tm;
     private TargetManager targetManager;
+    private bool initialized;
+    private bool triedToTeleportToRespawnPointBeforeInitialized;
 
     // Use this for initialization
-    void Start()
+    public void Start()
     {
         CurrentRespawnPoint = transform.position;
         player = GameObject.Find("Player");
@@ -39,6 +41,11 @@ public class RespawnPointController : MonoBehaviour {
             }
         };
         InputManager.instance.OnRespawn += () => { teleportPlayerToLastRespawnPoint(); };
+        initialized = true;
+        if (triedToTeleportToRespawnPointBeforeInitialized)
+        {
+            teleportPlayerToLastRespawnPoint();
+        }
     }
 	
 	// Update is called once per frame
@@ -66,6 +73,11 @@ public class RespawnPointController : MonoBehaviour {
 
     public void teleportPlayerToLastRespawnPoint()
     {
+        if (!initialized)
+        {
+            triedToTeleportToRespawnPointBeforeInitialized = true;
+            return;
+        }
         //reset position
         player.transform.position = CurrentRespawnPoint;
         //and speed

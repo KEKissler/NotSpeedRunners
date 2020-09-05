@@ -1,23 +1,40 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
 {
+    public CanvasGroup TimerContainer;
     public Text best;
     public Text current;
     public float bestTime { get; private set; }
     public float currentTime { get; private set; }
-    
-    private bool finished = false;
+
+    private bool IsVisible;
+    private bool stoppedTimer;
+    private Action onBeatBestTime;
 	
     void Start () {
         bestTime = float.MaxValue;
         currentTime = 0;
-        
-	}
-	
+    }
+
+    public void Show(float timeToBeatInSeconds, Action onBeatBestTime)
+    {
+        IsVisible = true;
+        TimerContainer.alpha = 1;
+        this.onBeatBestTime = onBeatBestTime;
+        ResetCurrentTime(timeToBeatInSeconds);
+    }
+
+    public void Hide()
+    {
+        IsVisible = false;
+        TimerContainer.alpha = 0;
+    }
+    
 	void Update () {
-        if (finished)
+        if (stoppedTimer || !IsVisible)
             return;
         currentTime += Time.deltaTime;
         if (currentTime > 10 * 60)
@@ -38,13 +55,18 @@ public class TimeManager : MonoBehaviour
         }
         return mod.ToString() + ":" + ((time < 10) ? "0" : "") + (Mathf.Round(100 * time) / 100).ToString();
     }
+    
     public void OnEndCurrentTimer()
     {
-        finished = true;
+        stoppedTimer = true;
         if(currentTime < bestTime)
         {
             bestTime = currentTime;
             best.text = TimeToString(currentTime);
+            if (onBeatBestTime != null)
+            {
+                onBeatBestTime.Invoke();
+            }
         }
     }
 
@@ -53,6 +75,6 @@ public class TimeManager : MonoBehaviour
         currentTime = 0;
         current.text = TimeToString(currentTime);
         best.text = bestTime <= 0 ? "-:-.--" : TimeToString(bestTime);
-        finished = false;
+        stoppedTimer = false;
     }
 }

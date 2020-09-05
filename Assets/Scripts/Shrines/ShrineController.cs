@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class ShrineController : MonoBehaviour
 {
+	public float timeToBeatInSeconds;
 	public float standstillTimeRequiredInSeconds;
+	[Header("Animation")]
 	public Transform MovingVisual;
 	public Vector3 DeactivatedPosition;
 	public float DeactivatedScale;
@@ -30,6 +32,7 @@ public class ShrineController : MonoBehaviour
 	private float toggleProgress;
 	private SpriteRenderer spriteRenderer;
 	private ConstantRotationController constantRotationController;
+	private TimeManager TimeManager;
 
 	public void Start()
 	{
@@ -40,6 +43,7 @@ public class ShrineController : MonoBehaviour
 		deactivatedLocalScale = new Vector3(DeactivatedScale, DeactivatedScale, 0);
 		spriteRenderer = MovingVisual.GetComponent<SpriteRenderer>();
 		constantRotationController = MovingVisual.GetComponent<ConstantRotationController>();
+		TimeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 	}
 
 	public void Update () {
@@ -119,5 +123,18 @@ public class ShrineController : MonoBehaviour
 	{
 		activated = !activated;
 		Debug.Log("Shrine " + (activated ? "Activated!" : "Deactivated."));
+		if (activated)
+		{
+			TimeManager.Show(timeToBeatInSeconds, () =>
+			{
+				//spawn the small key here
+				Debug.Log("Beat the shrine!");
+				TimeManager.Hide();
+			});
+		}
+		else
+		{
+			TimeManager.Hide();
+		}
 	}
 }
