@@ -353,6 +353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e489fe272174df34ca0ebed95a30117c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeToBeatInSeconds: 0
   standstillTimeRequiredInSeconds: 1
   MovingVisual: {fileID: 4823972130243270}
   DeactivatedPosition: {x: 0, y: -3, z: 0}

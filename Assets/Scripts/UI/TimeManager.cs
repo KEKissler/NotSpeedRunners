@@ -19,7 +19,10 @@ public class TimeManager : MonoBehaviour
         currentTime = 0;
         InputManager.instance.OnAnyInputDown += () =>
         {
-            stoppedTimer = false;
+            if (currentTime < bestTime)
+            {
+                stoppedTimer = false;
+            }
         };
     }
 
