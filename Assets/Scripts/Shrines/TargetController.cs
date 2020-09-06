@@ -13,6 +13,7 @@ public class TargetController : MonoBehaviour {
     void Start()
     {
         TargetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
+        gameObject.SetActive(false);
     }
 
     void OnTriggerEnter(Collider other)

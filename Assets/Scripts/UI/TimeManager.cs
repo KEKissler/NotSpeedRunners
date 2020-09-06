@@ -24,7 +24,8 @@ public class TimeManager : MonoBehaviour
         IsVisible = true;
         TimerContainer.alpha = 1;
         this.onBeatBestTime = onBeatBestTime;
-        ResetCurrentTime(timeToBeatInSeconds);
+        bestTime = timeToBeatInSeconds;
+        ResetCurrentTime();
     }
 
     public void Hide()
@@ -70,7 +71,7 @@ public class TimeManager : MonoBehaviour
         }
     }
 
-    public void ResetCurrentTime(float bestTime = 0)
+    public void ResetCurrentTime()
     {
         currentTime = 0;
         current.text = TimeToString(currentTime);

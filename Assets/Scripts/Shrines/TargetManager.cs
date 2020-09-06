@@ -49,4 +49,17 @@ public class TargetManager : MonoBehaviour
 		}
 		RemainingTargets = targets.childCount;
 	}
+
+	public void HideAllTargets()
+	{
+		if (targets == null)
+		{
+			return;
+		}
+		foreach (Transform t in targets)
+		{
+			t.gameObject.SetActive(false);
+		}
+		// RemainingTargets = 0;
+	}
 }

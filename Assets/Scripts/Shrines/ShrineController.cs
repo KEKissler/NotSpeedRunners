@@ -33,26 +33,28 @@ public class ShrineController : MonoBehaviour
 	private SpriteRenderer spriteRenderer;
 	private ConstantRotationController constantRotationController;
 	private TimeManager TimeManager;
+	private TargetManager TargetManager;
+	private bool beatenShrine;
 
 	public void Start()
 	{
-		var a = ActivationColors.Evaluate(0);
 		relativeActivatedPosition = ActivatedPosition + transform.position;
 		relativeDeactivatedPosition = DeactivatedPosition + transform.position;
 		activatedLocalScale = new Vector3(ActivateScale, ActivateScale, 0);
 		deactivatedLocalScale = new Vector3(DeactivatedScale, DeactivatedScale, 0);
 		spriteRenderer = MovingVisual.GetComponent<SpriteRenderer>();
 		constantRotationController = MovingVisual.GetComponent<ConstantRotationController>();
-		TimeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
+		TimeManager = FindObjectOfType<TimeManager>();
+		TargetManager = FindObjectOfType<TargetManager>();
 	}
 
 	public void Update () {
 		UpdateVisualProgress();
 	}
 
-	private void UpdateVisualProgress()
+	private void UpdateVisualProgress(float forceProgress = -1)
 	{
-		if (checkingForStandstill == null)
+		if (checkingForStandstill == null && forceProgress == -1)
 		{
 			return;
 		}
@@ -60,6 +62,11 @@ public class ShrineController : MonoBehaviour
 		var curvedProgress = activated ? 
 			deactivatingCurve.Evaluate(toggleProgress): 
 			activatingCurve.Evaluate(toggleProgress);
+
+		if (forceProgress != -1)
+		{
+			curvedProgress = Mathf.Clamp01(forceProgress);
+		}
 		
 		MovingVisual.transform.position = activated ? 
 			Vector3.Lerp(relativeActivatedPosition, relativeDeactivatedPosition, curvedProgress): 
@@ -78,6 +85,10 @@ public class ShrineController : MonoBehaviour
 	
 	public void OnTriggerEnter(Collider other)
 	{
+		if (beatenShrine)
+		{
+			return;
+		}
 		if (other.GetComponent<PlayerController>() != null)
 		{
 			checkingForStandstill = StartCoroutine(CheckForStandstill(other.GetComponent<Rigidbody>()));
@@ -119,22 +130,41 @@ public class ShrineController : MonoBehaviour
 		toggleProgress = 0;
 	}
 
+	public void ResetPlayer()
+	{
+		if (!activated || beatenShrine)
+		{
+			TimeManager.Hide();
+			return;
+		}
+		TimeManager.ResetCurrentTime();
+		TargetManager.ResetAllTargets();
+	}
+
 	private void ToggleShrineActivated()
 	{
+		if (beatenShrine)
+		{
+			return;
+		}
 		activated = !activated;
 		Debug.Log("Shrine " + (activated ? "Activated!" : "Deactivated."));
 		if (activated)
 		{
+			TargetManager.ResetAllTargets();
 			TimeManager.Show(timeToBeatInSeconds, () =>
 			{
 				//spawn the small key here
 				Debug.Log("Beat the shrine!");
 				TimeManager.Hide();
+				UpdateVisualProgress(1);
+				beatenShrine = true;
 			});
 		}
 		else
 		{
 			TimeManager.Hide();
+			TargetManager.HideAllTargets();
 		}
 	}
 }

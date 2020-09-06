@@ -16,7 +16,7 @@ public class RespawnPointController : MonoBehaviour {
     private PlayerController pc;
     private JumpController jc;
     private TimeManager tm;
-    private TargetManager targetManager;
+    private ShrineController shrineController;
     private bool initialized;
     private bool triedToTeleportToRespawnPointBeforeInitialized;
 
@@ -29,7 +29,7 @@ public class RespawnPointController : MonoBehaviour {
         pc = player.GetComponent<PlayerController>();
         jc = player.GetComponent<JumpController>();
         tm = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-        targetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
+        shrineController = FindObjectOfType<ShrineController>();
 
         tm.enabled = false;
         rb.useGravity = false;
@@ -86,10 +86,11 @@ public class RespawnPointController : MonoBehaviour {
         pc.releaseGrapple();
         //and grant double jump back
         jc.hasDoubleJump = true;
-        //and reset all targets
-        targetManager.ResetAllTargets();
-        //and reset the timer
-        tm.ResetCurrentTime();
+        //reset targets if active shrine
+        if(shrineController != null)
+        {
+            shrineController.ResetPlayer();
+        }
         //start timer out as stopped
         tm.enabled = false;
         pausedGameAtSpawn = true;
