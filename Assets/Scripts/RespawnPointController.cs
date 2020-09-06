@@ -92,7 +92,7 @@ public class RespawnPointController : MonoBehaviour {
             shrineController.ResetPlayer();
         }
         //start timer out as stopped
-        tm.enabled = false;
+        // tm.ResetCurrentTime();
         pausedGameAtSpawn = true;
         rb.useGravity = false;
         //reset rotation and angular velo

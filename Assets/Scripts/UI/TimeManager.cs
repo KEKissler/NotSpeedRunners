@@ -17,6 +17,10 @@ public class TimeManager : MonoBehaviour
     void Start () {
         bestTime = float.MaxValue;
         currentTime = 0;
+        InputManager.instance.OnAnyInputDown += () =>
+        {
+            stoppedTimer = false;
+        };
     }
 
     public void Show(float timeToBeatInSeconds, Action onBeatBestTime)
@@ -76,6 +80,6 @@ public class TimeManager : MonoBehaviour
         currentTime = 0;
         current.text = TimeToString(currentTime);
         best.text = bestTime <= 0 ? "-:-.--" : TimeToString(bestTime);
-        stoppedTimer = false;
+        stoppedTimer = true;
     }
 }
