@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ShrineController : MonoBehaviour
 {
+	public Transform associatedTargets;
 	public float timeToBeatInSeconds;
 	public float standstillTimeRequiredInSeconds;
 	[Header("Animation")]
@@ -46,6 +47,14 @@ public class ShrineController : MonoBehaviour
 		constantRotationController = MovingVisual.GetComponent<ConstantRotationController>();
 		TimeManager = FindObjectOfType<TimeManager>();
 		TargetManager = FindObjectOfType<TargetManager>();
+		if(associatedTargets != null)
+		{
+			//targets associated with a shrine start out disabled
+			foreach (Transform target in associatedTargets)
+			{
+				target.gameObject.SetActive(false);
+			}
+		}
 	}
 
 	public void Update () {
@@ -151,6 +160,12 @@ public class ShrineController : MonoBehaviour
 		Debug.Log("Shrine " + (activated ? "Activated!" : "Deactivated."));
 		if (activated)
 		{
+			var currentTargetParent = TargetManager.instance.targets;
+			if (currentTargetParent != associatedTargets)
+			{
+				TargetManager.HideAllTargets();
+				TargetManager.instance.targets = associatedTargets;
+			}
 			TargetManager.ResetAllTargets();
 			TimeManager.Show(timeToBeatInSeconds, () =>
 			{

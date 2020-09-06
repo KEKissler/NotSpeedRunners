@@ -13,13 +13,15 @@ public class TargetController : MonoBehaviour {
     void Start()
     {
         TargetManager = GameObject.Find("TargetManager").GetComponent<TargetManager>();
-        gameObject.SetActive(false);
     }
 
     void OnTriggerEnter(Collider other)
     {
         gameObject.SetActive(false);
-        --TargetManager.RemainingTargets;
+        if (TargetManager.instance.IsTargetPartOfCurrentShrine(transform))
+        {
+            --TargetManager.RemainingTargets;
+        }
         GameObject toEdit = Instantiate(particleEmitterPrefab, transform.position, Quaternion.identity);
         ParticleSystem particles = toEdit.GetComponent<ParticleSystem>();
         ParticleSystem.ShapeModule s = particles.shape;

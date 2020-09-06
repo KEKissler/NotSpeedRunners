@@ -37,6 +37,15 @@ public class TargetManager : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 	}
 
+	public bool IsTargetPartOfCurrentShrine(Transform target)
+	{
+		if (targets == null)
+		{
+			return false;
+		}
+		return target.IsChildOf(targets);
+	}
+
 	public void ResetAllTargets()
 	{
 		if (targets == null)
