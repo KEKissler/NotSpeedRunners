@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -13,7 +15,8 @@ public class LevelLoader : MonoBehaviour
     private static LevelLoader instance;
     private RespawnPointController RespawnPointController;
     private readonly List<Scene> ActiveAdditiveScenes = new List<Scene>();
-    private Coroutine currentAsyncOperations;
+    private Coroutine currentAsyncOperations;//acts as a semaphore, null indicates not in use. Only allowing one load or unload at a time, so callbacks execute under expected circumstances
+    private readonly Queue<LevelLoadOperation> loadingOperations = new Queue<LevelLoadOperation>();
     private string[] scenePaths = new string[0];
     private AssetBundle bundle;
 
@@ -56,7 +59,7 @@ public class LevelLoader : MonoBehaviour
                 ActiveAdditiveScenes.Add(scene);
             }
         }
-        LoadScene(scenePaths[FirstSceneIndex]);
+        LoadScene(FirstSceneIndex);
         yield break;
     }
 
@@ -81,70 +84,117 @@ public class LevelLoader : MonoBehaviour
     }
 
     public void Update () {
-        for (var i = 0; i < scenePaths.Length; ++i)
+        if (currentAsyncOperations != null)
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-            {
-                LoadScene(scenePaths[i]);
-                break;
-            }
+            return;
+        }
+        if (loadingOperations.Count <= 0)
+        {
+            return;
+        }
+        var queuedParameters = loadingOperations.Dequeue();
+        if (queuedParameters.Load)
+        {
+            LoadScene(queuedParameters.ScenePathIndex, queuedParameters.Finished);
+        }
+        else
+        {
+            UnloadScene(queuedParameters.ScenePathIndex, queuedParameters.Finished);
         }
     }
 
-    private void LoadScene(string sceneName, Action finished = null)
+    public void LoadScene(int scenePathIndex, Action finished = null)
     {
         if (currentAsyncOperations != null)
         {
-            Debug.LogWarning("Ignored request to load scene " + sceneName + ", still processing last load.");
-            if (finished != null)
-            {
-                finished.Invoke();
-            }
+            loadingOperations.Enqueue(new LevelLoadOperation {Load = true, ScenePathIndex = scenePathIndex, Finished = finished});
             return;
         }
 
-        var alreadyLoadedScene = SceneManager.GetSceneByName(sceneName);
+        var scenePath = scenePaths[scenePathIndex];
+        var alreadyLoadedScene = SceneManager.GetSceneByName(scenePath);
         foreach (var scene in ActiveAdditiveScenes)
         {
-            if (scene.path.Equals(sceneName) || scene.name.Equals(sceneName))
+            if (scene.path.Equals(scenePath) || scene.name.Equals(scenePath))
             {
                 alreadyLoadedScene = scene;
             }
         }
         if (alreadyLoadedScene.isLoaded)
         {
-            Debug.LogWarning("Ignored request to load scene " + alreadyLoadedScene.name + ", it's already loaded!\nStill initializing scene from current state.");
-            InitializeScene(alreadyLoadedScene, finished);
+            Debug.LogWarning("Ignored request to load scene " + alreadyLoadedScene.name + ", it's already loaded!");
             if (finished != null)
             {
                 finished.Invoke();
             }
             return;
         }
-        Time.timeScale = 0;
-        var asyncOperations = new List<AsyncOperation>();
-        asyncOperations.Add(SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive));
-        //for now, unload all but the Startup Scene so that there is always Startup and the Additive Scene present
-        var toRemove = new List<Scene>();
-        foreach (var additiveScene in ActiveAdditiveScenes)
+
+        var cachedGravity = Physics.gravity;
+        var firstSceneLoaded = false;
+        if (SceneManager.sceneCount == 1)//just the Startup Scene present, no level geometry yet
         {
-            asyncOperations.Add(SceneManager.UnloadSceneAsync(additiveScene));
-            toRemove.Add(additiveScene);
+            firstSceneLoaded = true;
+            Time.timeScale = 0;
+            Physics.gravity = new Vector3();
         }
-        foreach (var scene in toRemove)
-        {
-            ActiveAdditiveScenes.Remove(scene);
-        }
+        var asyncOperations = new List<AsyncOperation> {SceneManager.LoadSceneAsync(scenePath, LoadSceneMode.Additive)};
         currentAsyncOperations = StartCoroutine(WaitForAsyncOperations(asyncOperations, () =>
         {
-            var scene = SceneManager.GetSceneByName(sceneName);
+            var scene = SceneManager.GetSceneByName(scenePath);
             if (!scene.isLoaded)
             {
-                scene = SceneManager.GetSceneByPath(sceneName);
+                scene = SceneManager.GetSceneByPath(scenePath);
             }
             ActiveAdditiveScenes.Add(scene);
-            InitializeScene(scene, finished);
-            Time.timeScale = 1;
+            if (finished != null)
+            {
+                finished.Invoke();
+            }
+            if (firstSceneLoaded)
+            {
+                Time.timeScale = 1;
+                Physics.gravity = cachedGravity;
+            }
+            currentAsyncOperations = null;
+        }));
+    }
+
+    public void UnloadScene(int scenePathIndex, Action finished = null)
+    {
+        if (currentAsyncOperations != null)
+        {
+            loadingOperations.Enqueue(new LevelLoadOperation {Load = false, ScenePathIndex = scenePathIndex, Finished = finished});
+            return;
+        }
+        
+        var scenePath = scenePaths[scenePathIndex];
+        var sceneToUnload = new Scene();
+        foreach (var scene in ActiveAdditiveScenes)
+        {
+            if (scene.path.Equals(scenePath) || scene.name.Equals(scenePath))
+            {
+                sceneToUnload = scene;
+            }
+        }
+        if (sceneToUnload.name == "" || !sceneToUnload.isLoaded)
+        {
+            Debug.LogWarning("Ignored request to unload scene at " + scenePath + ". It's already unloaded (or untracked).");
+            if (finished != null)
+            {
+                finished.Invoke();
+            }
+            return;
+        }
+
+        var asyncOperations = new List<AsyncOperation> {SceneManager.UnloadSceneAsync(sceneToUnload)};
+        currentAsyncOperations = StartCoroutine(WaitForAsyncOperations(asyncOperations, () =>
+        {
+            ActiveAdditiveScenes.Remove(sceneToUnload);
+            if (finished != null)
+            {
+                finished.Invoke();
+            }
             currentAsyncOperations = null;
         }));
     }
@@ -174,24 +224,14 @@ public class LevelLoader : MonoBehaviour
         }
         return allFinished;
     }
+}
 
-    private void InitializeScene(Scene scene, Action finished = null)
-    {
-        if (scene.isLoaded == false)
-        {
-            Debug.LogError("Cannot initialize unloaded scene \"" + scene.name + "\".");
-            if (finished != null)
-            {
-                finished.Invoke();
-            }
-            return;
-        }
-        TargetManager.instance.targets = GameObject.Find("Targets").transform;
-        RespawnPointController = FindObjectOfType<RespawnPointController>();
-        RespawnPointController.teleportPlayerToLastRespawnPoint();
-        if (finished != null)
-        {
-            finished.Invoke();
-        }
-    }
+/// <summary>
+/// Used to save parameters for LevelLoad and LevelUnload calls that could not be immediately completed, but will be queued up to execute ASAP.
+/// </summary>
+public class LevelLoadOperation
+{
+    public bool Load;
+    public int ScenePathIndex;
+    public Action Finished;
 }
