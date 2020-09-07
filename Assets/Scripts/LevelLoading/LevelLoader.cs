@@ -12,7 +12,8 @@ public class LevelLoader : MonoBehaviour
 {
     public int FirstSceneIndex;
 
-    private static LevelLoader instance;
+    public static LevelLoader instance;
+    
     private RespawnPointController RespawnPointController;
     private readonly List<Scene> ActiveAdditiveScenes = new List<Scene>();
     private Coroutine currentAsyncOperations;//acts as a semaphore, null indicates not in use. Only allowing one load or unload at a time, so callbacks execute under expected circumstances

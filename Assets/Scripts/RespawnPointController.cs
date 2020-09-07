@@ -4,38 +4,38 @@ using UnityEngine;
 
 public class RespawnPointController : MonoBehaviour {
 
-    public float minPosition;
+    public Transform player;
+    public Rigidbody playerRigidbody;
+    public PlayerController playerController;
+    public JumpController jumpController;
+    public TimeManager timeManager;
     [HideInInspector]
     public Vector3 CurrentRespawnPoint;
-    [HideInInspector]
-    public int blockers = 0;
 
-    private bool pausedGameAtSpawn = true;
-    private GameObject player;
-    private Rigidbody rb;
-    private PlayerController pc;
-    private JumpController jc;
-    private TimeManager tm;
+    public static RespawnPointController instance;
+
     private ShrineController shrineController;
+    private bool pausedGameAtSpawn = true;
+    
     private bool initialized;
     private bool triedToTeleportToRespawnPointBeforeInitialized;
 
-    // Use this for initialization
     public void Start()
     {
+        if (instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
+        
         CurrentRespawnPoint = transform.position;
-        player = GameObject.Find("Player");
-        rb = player.GetComponent<Rigidbody>();
-        pc = player.GetComponent<PlayerController>();
-        jc = player.GetComponent<JumpController>();
-        tm = GameObject.Find("TimeManager").GetComponent<TimeManager>();
-        shrineController = FindObjectOfType<ShrineController>();
 
-        tm.enabled = false;
-        rb.useGravity = false;
+        timeManager.enabled = false;
+        playerRigidbody.useGravity = false;
         InputManager.instance.OnAnyInputDown += () =>
         {
-            if (pausedGameAtSpawn && blockers == 0)
+            if (pausedGameAtSpawn)
             {
                 UnfreezeGame();
             }
@@ -48,7 +48,6 @@ public class RespawnPointController : MonoBehaviour {
         }
     }
 	
-	// Update is called once per frame
 	void Update () {
         if (pausedGameAtSpawn)
         {
@@ -57,35 +56,36 @@ public class RespawnPointController : MonoBehaviour {
                 UnfreezeGame();
             }
         }
-        if (player.transform.position.y < minPosition)
-        {
-            InputManager.instance.PlayerFellOutOfBounds();
-        }       
     }
 	
     private void UnfreezeGame()
     {
-        rb.useGravity = true;
+        playerRigidbody.useGravity = true;
         pausedGameAtSpawn = false;
-        tm.enabled = true;
-        
+        timeManager.enabled = true;
     }
 
+    public void SetActiveShrine(ShrineController newActiveShrine)
+    {
+        shrineController = newActiveShrine;
+    }
+    
     public void teleportPlayerToLastRespawnPoint()
     {
         if (!initialized)
         {
+            Debug.LogError("called teleportPlayerToLastRespawnPoint before singleton initialized!");
             triedToTeleportToRespawnPointBeforeInitialized = true;
             return;
         }
         //reset position
-        player.transform.position = CurrentRespawnPoint;
+        player.position = CurrentRespawnPoint;
         //and speed
-        rb.velocity = new Vector3();
+        playerRigidbody.velocity = new Vector3();
         //and disconnect grapples
-        pc.releaseGrapple();
+        playerController.releaseGrapple();
         //and grant double jump back
-        jc.hasDoubleJump = true;
+        jumpController.hasDoubleJump = true;
         //reset targets if active shrine
         if(shrineController != null)
         {
@@ -94,9 +94,9 @@ public class RespawnPointController : MonoBehaviour {
         //start timer out as stopped
         // tm.ResetCurrentTime();
         pausedGameAtSpawn = true;
-        rb.useGravity = false;
+        playerRigidbody.useGravity = false;
         //reset rotation and angular velo
-        rb.angularVelocity = new Vector3();
-        player.transform.rotation = Quaternion.identity;
+        playerRigidbody.angularVelocity = new Vector3();
+        player.rotation = Quaternion.identity;
     }
 }

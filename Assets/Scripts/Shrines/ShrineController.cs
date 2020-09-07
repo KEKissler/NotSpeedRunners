@@ -160,6 +160,7 @@ public class ShrineController : MonoBehaviour
 		Debug.Log("Shrine " + (activated ? "Activated!" : "Deactivated."));
 		if (activated)
 		{
+			RespawnPointController.instance.SetActiveShrine(this);
 			var currentTargetParent = TargetManager.instance.targets;
 			if (currentTargetParent != associatedTargets)
 			{
