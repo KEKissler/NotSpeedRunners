@@ -5174,7 +5174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77ed9c18ad8042269237e064a87c6a16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelIndex: 4
+  levelIndex: 3
 --- !u!65 &832837723
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10250,7 +10250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 764609ac96b3456ba27dc37b48ff2ba7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelIndex: 4
+  levelIndex: 3
 --- !u!1001 &1761336839
 Prefab:
   m_ObjectHideFlags: 0

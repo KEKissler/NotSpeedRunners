@@ -50,7 +50,6 @@ public class GroundMovementController : MonoBehaviour {
                     //so set velocity to either the targetWalkSpeed or leave it untouched if player was already traveling faster
                     if (Mathf.Abs(rb.velocity.x) < targetWalkSpeed)
                     {
-                        Debug.Log("Set to target walk speed!");
                         rb.velocity = new Vector3(Mathf.Sign(oldSpeed) * targetWalkSpeed, rb.velocity.y, 0);
                     }
                 }

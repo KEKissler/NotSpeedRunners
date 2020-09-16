@@ -50,7 +50,6 @@ public class AirWalkController : MonoBehaviour {
                     //so set velocity to either the targetWalkSpeed or leave it untouched if player was already traveling faster
                     if (Mathf.Abs(rb.velocity.x) < maxAirSpeed)
                     {
-                        Debug.Log("Set to target air speed!");
                         rb.velocity = new Vector3(Mathf.Sign(oldSpeed) * maxAirSpeed, rb.velocity.y, 0);
                     }
                 }
