@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class GrappleMovementController : MonoBehaviour {
     public float grappleSpeedMultiplier;
     public float frameWindowSize;//this value is how frequently to poll, in seconds, for different angle offsets for the release timer
     public int specialDropFrames;//total number of frames where special behavior occurs on grapple release
+    public KeyCode defaultGrappleBehaviorToggleKey;
 
     private PlayerController pc;
     private Rigidbody rb;
@@ -20,6 +22,7 @@ public class GrappleMovementController : MonoBehaviour {
     private float timeSinceGrappleLatch = 0.0f;
     private float speedLastUpdate = 0f;
     private float distanceToGrapplePoint = 0f;
+    private bool isDefaultGrapple;
     
 	// Use this for initialization
 	void Start () {
@@ -28,9 +31,17 @@ public class GrappleMovementController : MonoBehaviour {
         jc = GetComponent<JumpController>();//for checking grounded state, in case a grapple scrapes the ground
         grappleToVelocityDirection.eulerAngles = new Vector3(0, 0, 270);
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    private void UpdateGrappleType()
+    {
+        if (Input.GetKeyDown(defaultGrappleBehaviorToggleKey))
+        {
+            isDefaultGrapple = !isDefaultGrapple;
+        }
+    }
+    
+    void Update () {
+        UpdateGrappleType();
         if (!pc.isGrappling)
             return;
         float oldSpeed = rb.velocity.magnitude;
@@ -48,11 +59,6 @@ public class GrappleMovementController : MonoBehaviour {
             magnitude -= Time.deltaTime * grappleFriction;
         }
         
-       // magnitude = Mathf.Clamp(rb.velocity.magnitude, minimumGrappleSpeed, maximumGrappleSpeed);
-        //Debug.Log("acceleration = " + (magnitude - speedLastUpdate) / Time.deltaTime);
-
-        //bool wasNotClamped = Mathf.Approximately(oldSpeed, magnitude);
-        
         //only do this if not clamped, since clamping is an instant change that is seen as near infinite acceleration :/
         //if speedchange since last frame is too great, reduce the change to the maximum allowed acceleration
         if (wasNotClamped)
@@ -65,7 +71,6 @@ public class GrappleMovementController : MonoBehaviour {
                 {
                     //set speed to max allowed difference from last update's measured speed
                     magnitude = speedLastUpdate + (maxPositiveGrappleAccel * Time.deltaTime);
-                    //Debug.Log("Reduced Speed Gain");
                 }
             }
             else
@@ -75,29 +80,37 @@ public class GrappleMovementController : MonoBehaviour {
                 {
                     //set speed to max allowed difference from last update's measured speed
                     magnitude = speedLastUpdate - (maxNegativeGrappleAccel * Time.deltaTime);
-                    //Debug.Log("Reduced Speed Loss");
                 }
             }
         }
         //now that magnitude is all sorted out, apply it in the swingin direction
         rb.velocity = grappleToVelocityDirection * ((pc.grapplePoint - transform.position).normalized * magnitude);
-        //enforce maximum distance for grapple line by moving player back to max
-        Vector2 grapplePointToPlayer = transform.position - pc.grapplePoint;
-        //if (grapplePointToPlayer.magnitude > distanceToGrapplePoint)
-        //{
-         //   transform.position = pc.grapplePoint + ((Vector3)grapplePointToPlayer.normalized * distanceToGrapplePoint);
-        //}
-        timeSinceGrappleLatch += Time.deltaTime;
         speedLastUpdate = magnitude;
 	}
 
+    public void FixedUpdate()
+    {
+        if (!pc.isGrappling)
+            return;
+        timeSinceGrappleLatch += Time.fixedDeltaTime;
+        if (isDefaultGrapple)
+        {
+            return;
+        }
+        //enforce maximum distance for grapple line by moving player back to max
+        Vector2 grapplePointToPlayer = transform.position - pc.grapplePoint;
+        if (grapplePointToPlayer.magnitude > distanceToGrapplePoint)
+        {
+            rb.MovePosition(pc.grapplePoint + ((Vector3)grapplePointToPlayer.normalized * distanceToGrapplePoint));
+        }
+    }
+
     public void OnGrappleLatch()
     {
-        //distanceToGrapplePoint = Vector2.Distance(transform.position, pc.grapplePoint);
         rb.velocity *= grappleSpeedMultiplier;
         timeSinceGrappleLatch = 0.0f;
         speedLastUpdate = rb.velocity.magnitude;
-        //Physics.gravity *= 2;
+        distanceToGrapplePoint = (pc.grapplePoint - transform.position).magnitude;
     }
 
     public void OnGrappleRelease()
@@ -106,11 +119,9 @@ public class GrappleMovementController : MonoBehaviour {
         //only do special things if the frame this was called is in the specialDropFrame range
         if(frame <= specialDropFrames)
         {
-            Debug.Log("drop grapple");
             //redirect velocity down, down amount scaled to how close to frame 0 the release was
             rb.velocity = rb.velocity.magnitude * Vector3.Lerp(Vector3.down, rb.velocity.normalized, (1.0f * frame) / specialDropFrames);
         }
-        //Physics.gravity /= 2;
     }
 
     public void setGrappleDir(Direction dir)
