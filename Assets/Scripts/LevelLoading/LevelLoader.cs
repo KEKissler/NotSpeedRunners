@@ -43,15 +43,24 @@ public class LevelLoader : MonoBehaviour
             yield break;
         }
 
-        scenePaths = bundle.GetAllScenePaths();
+        var unsortedScenePaths = new List<string>(bundle.GetAllScenePaths());
+        unsortedScenePaths.Sort();
+        scenePaths = unsortedScenePaths.ToArray();
 #else
         var paths = new List<string>();
         foreach (var guid in AssetDatabase.FindAssets("t:scene", new[] {"Assets/Scenes/LevelsAssetBundle"}))
         {
             paths.Add(AssetDatabase.GUIDToAssetPath(guid));
+            paths.Sort();
+            scenePaths = paths.ToArray();
         }
-        scenePaths = paths.ToArray();
 #endif
+        var scenePathText = "";
+        foreach (var scenePath in scenePaths)
+        {
+            scenePathText += scenePath + "\n";
+        }
+        Debug.Log("scenePaths: " + scenePathText);
         for (var i = 0; i < SceneManager.sceneCount; ++i)
         {
             var scene = SceneManager.GetSceneAt(i);
