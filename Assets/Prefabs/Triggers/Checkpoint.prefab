@@ -110,5 +110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c7d0b20ec8e840468a37f9d592f4af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RespawnPointController: {fileID: 0}
+  BoxColor: {r: 1, g: 0, b: 0, a: 1}
+  GizmoWireframe: 1
   newRespawnPoint: {fileID: 4476024775116042}

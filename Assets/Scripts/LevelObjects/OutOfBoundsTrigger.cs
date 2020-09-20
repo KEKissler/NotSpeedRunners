@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class OutOfBoundsTrigger : MonoBehaviour
+public class OutOfBoundsTrigger : LevelTrigger
 {
 	public void OnTriggerEnter(Collider other)
 	{

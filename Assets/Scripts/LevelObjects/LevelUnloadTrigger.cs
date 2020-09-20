@@ -1,12 +1,12 @@
 using UnityEngine;
 
 
-public class LevelLoadTrigger : MonoBehaviour
+public class LevelUnloadTrigger : LevelTrigger
 {
     public int levelIndex;
 
     public void OnTriggerEnter(Collider other)
     {
-        LevelLoader.instance.LoadScene(levelIndex);
+        LevelLoader.instance.UnloadScene(levelIndex);
     }
 }

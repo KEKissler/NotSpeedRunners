@@ -8,25 +8,25 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Startup.unity
     guid: 556e5cb917e8d194eaa6a68e0855fbcb
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LevelsAssetBundle/1.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LevelsAssetBundle/2.unity
     guid: 8f837118fa60d0148889741e833c1fae
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LevelsAssetBundle/4.unity
     guid: 18b74878ec835b4449378282ce4cd94f
-  - enabled: 1
+  - enabled: 0
+    path: Assets/Scenes/LevelsAssetBundle/FirstShrine.unity
+    guid: 9aa68ee17e25700449a68ec9d0c16980
+  - enabled: 0
     path: Assets/Scenes/LevelsAssetBundle/HeightIsSpeed.unity
     guid: 1afb2a655323e3648bdd79d5f7df6539
-  - enabled: 1
-    path: Assets/Scenes/LevelsAssetBundle/HeightIsSpeed 1.unity
-    guid: 9aa68ee17e25700449a68ec9d0c16980
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LevelsAssetBundle/Tutorial.unity
     guid: ec96bb58ac625a7468c9fa937e6afe38
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LevelsAssetBundle/tutorialMaybe.unity
     guid: 280474ac405d55b4289acdc3dde1abf1
   m_configObjects: {}

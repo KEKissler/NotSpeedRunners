@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
-public class Checkpoint : MonoBehaviour {
-
+public class Checkpoint : LevelTrigger
+{
     public Transform newRespawnPoint;
 
     public void OnTriggerEnter(Collider other)
