@@ -4448,7 +4448,7 @@ Prefab:
     - target: {fileID: 114186295482044626, guid: 71c287ac03354fc4f9f27a110fc2f23c,
         type: 2}
       propertyPath: levelIndex
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4319068082220400, guid: 71c287ac03354fc4f9f27a110fc2f23c, type: 2}
       propertyPath: m_LocalScale.x
@@ -8100,7 +8100,7 @@ Prefab:
     - target: {fileID: 114337442820265136, guid: f0ddbb80e99192b4885dea00df93b461,
         type: 2}
       propertyPath: levelIndex
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4563449814503176, guid: f0ddbb80e99192b4885dea00df93b461, type: 2}
       propertyPath: m_LocalScale.x
@@ -8109,6 +8109,11 @@ Prefab:
     - target: {fileID: 4563449814503176, guid: f0ddbb80e99192b4885dea00df93b461, type: 2}
       propertyPath: m_LocalScale.y
       value: 2.1875
+      objectReference: {fileID: 0}
+    - target: {fileID: 114337442820265136, guid: f0ddbb80e99192b4885dea00df93b461,
+        type: 2}
+      propertyPath: GizmoWireframe
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0ddbb80e99192b4885dea00df93b461, type: 2}
@@ -11185,6 +11190,7 @@ Transform:
   - {fileID: 235969594}
   - {fileID: 1797242117}
   - {fileID: 1503378101}
+  - {fileID: 2144560812}
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -12775,3 +12781,62 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2142478913}
   m_CullTransparentMesh: 0
+--- !u!1001 &2144560811
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1947587355}
+    m_Modifications:
+    - target: {fileID: 4233706429390018, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 319.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233706429390018, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233706429390018, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233706429390018, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233706429390018, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233706429390018, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233706429390018, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233706429390018, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233706429390018, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1468054232548416, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+      propertyPath: m_Name
+      value: SlipstreamBlock (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233706429390018, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e73a19815d9eb904b8c5b8fe8a112d36, type: 2}
+  m_IsPrefabAsset: 0
+--- !u!4 &2144560812 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4233706429390018, guid: e73a19815d9eb904b8c5b8fe8a112d36,
+    type: 2}
+  m_PrefabInternal: {fileID: 2144560811}

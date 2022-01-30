@@ -1,0 +1,2 @@
+the order of Scene objects in this folder, top to bottom, determines the index of levels both referenced at editor time and determines the index of levels in the asset bundle too. 
+(as long as all scenes are tagged as part of the levels asset bundle)
